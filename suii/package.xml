@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>suii</name>
+  <version>0.0.0</version>
+  <description>The suii robot metapackage</description>
+
+  <maintainer email="info@robohub-eindhoven.nl">robohub</maintainer>
+
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>suii_description</exec_depend>
+  <exec_depend>suii_bringup</exec_depend>
+  <exec_depend>suii_drivers</exec_depend>
+
+  <export>
+    <metapackage />
+  </export>
+</package>
