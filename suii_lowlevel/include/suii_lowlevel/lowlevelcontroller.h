@@ -47,9 +47,7 @@ public:
   LowLevelController(const std::string &port, uint32_t baud_rate, boost::asio::io_service &io);
   ~LowLevelController(){};
 
-  void sendVelocity(int16_t speedLeft, int16_t speedRight);
-  void sendLidarSpeed(uint16_t speed);
-  void sendPids(float kp,float ki, float kd);
+  void sendPong();
   int8_t readMsg(SerialMsg *serialMsg);
   void close() { shutting_down_ = true; };
 

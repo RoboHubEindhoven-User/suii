@@ -38,6 +38,8 @@
 #include <suii_lowlevel/lowlevelcontroller.h>
 #include <suii_lowlevel/serialMsg.h>
 
+#include <suii_lowlevel/suii_status.h>
+
 #include "std_msgs/Bool.h"
  
 
@@ -51,6 +53,7 @@
 // }
 
 ros::Publisher g_estop_pub;
+ros::Publisher g_status_pub;
 
 int main(int argc, char **argv)
 {
@@ -62,7 +65,7 @@ int main(int argc, char **argv)
   std::string port;
   int baud_rate;
 
-  priv_nh.param("port", port, std::string("/dev/ttyACM0"));
+  priv_nh.param("port", port, std::string("/dev/ttyUSB0"));
   priv_nh.param("baud_rate", baud_rate, 115200);
 
   boost::asio::io_service io;
@@ -71,10 +74,8 @@ int main(int argc, char **argv)
     ROS_INFO("connecting to lowLevelController %s@%i",port.c_str(),baud_rate);
     g_lowLevelController = new LowLevelController(port, baud_rate, io);
     ROS_INFO("connected to lowLevelController");
-    // ros::Subscriber cmdSubscriber = n.subscribe("/cmd_vel", 1000, cmdCallback);
-    // ros::Subscriber rpmSubscriber = n.subscribe("/rpms", 1000, rpmCallback);
-    // ros::Subscriber pidSubscriber = n.subscribe("/wheel_pid", 1000, pidCallback);
     g_estop_pub = n.advertise<std_msgs::Bool>("estop", 50);
+    g_status_pub = n.advertise<suii_lowlevel::suii_status>("lowlevel_status", 50);
     
     
     ros::Rate r(100); 
@@ -86,24 +87,32 @@ int main(int argc, char **argv)
       int8_t status = g_lowLevelController->readMsg(&sMsg);
       if(status == 1)
       {
-        //g_lowLevelController->sendPong();
+        g_lowLevelController->sendPong();
         switch(sMsg.type)
         {
           case 1: //ping
           {
-            ROS_INFO("resived ping");
+            //ROS_INFO("resived ping");
             break;
           }
           case 2: //status
           {
-            StatusMsg statusMsg;
-            memcpy(&statusMsg,sMsg.data,sizeof(statusMsg));
-            ROS_INFO("state: %i",statusMsg.state);
+            StatusMsg statusMsgSerial;
+            memcpy(&statusMsgSerial,sMsg.data,sizeof(statusMsgSerial));
+            //ROS_INFO("state: %i",statusMsgSerial.state);
             
             std_msgs::Bool estopMsg;
+            suii_lowlevel::suii_status statusMsg;
             
-            estopMsg.data = statusMsg.estop;
+            estopMsg.data = statusMsgSerial.estop;
+            statusMsg.enabled = (statusMsgSerial.state == 3);
+            statusMsg.estop = statusMsgSerial.estop;
+            statusMsg.error = false;
+            statusMsg.battery = -1.0;
+            statusMsg.state = statusMsgSerial.state;
+
             g_estop_pub.publish(estopMsg);
+            g_status_pub.publish(statusMsg);
             break;
           }
           default:
@@ -114,7 +123,7 @@ int main(int argc, char **argv)
       }
       else
       {
-         ROS_INFO("receive failed, error: %i",status);
+         //ROS_INFO("receive failed, error: %i",status);
       }
 
       r.sleep();

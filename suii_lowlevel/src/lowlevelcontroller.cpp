@@ -44,33 +44,16 @@ LowLevelController::LowLevelController(const std::string &port, uint32_t baud_ra
 	serial_.set_option(boost::asio::serial_port_base::baud_rate(baud_rate_));
 }
 
-void LowLevelController::sendVelocity(int16_t speedLeft, int16_t speedRight)
+void LowLevelController::sendPong()
 {
 	uint8_t data[4];
-	data[0] = speedLeft & 0xFF;
-	data[1] = (speedLeft >> 8) & 0xFF;
-	data[2] = speedRight & 0xFF;
-	data[3] = (speedRight >> 8) & 0xFF;
+	data[0] = 0x01;
+	data[1] = 0xFF;
+	data[2] = 0xFF;
+	data[3] = 0xFF;
 	sendMsg(1, data, 4);
 }
-void LowLevelController::sendLidarSpeed(uint16_t speed)
-{
-	uint8_t data[2];
-	data[0] = speed & 0xFF;
-	data[1] = (speed >> 8) & 0xFF;
 
-	sendMsg(2, data, 2);
-}
-void LowLevelController::sendPids(float kp,float ki, float kd)
-{
-	PidMsg pids;
-	pids.kp = kp;
-	pids.ki = ki;
-	pids.kd = kd;
-	uint8_t data[sizeof(PidMsg)];
-	memcpy(data,&pids,sizeof(PidMsg));
-	sendMsg(4, data, sizeof(PidMsg));
-}
 void LowLevelController::sendMsg(uint8_t type, uint8_t *data, uint8_t len)
 {
 	uint8_t txBuffer[32];
