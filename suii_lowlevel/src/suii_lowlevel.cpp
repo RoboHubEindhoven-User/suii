@@ -38,9 +38,13 @@
 #include <suii_lowlevel/lowlevelcontroller.h>
 #include <suii_lowlevel/serialMsg.h>
 
+#include <std_srvs/Empty.h>
+
 #include <suii_lowlevel/suii_status.h>
 
 #include "std_msgs/Bool.h"
+
+bool g_isActive = false;
  
 
  LowLevelController* g_lowLevelController;
@@ -54,6 +58,23 @@
 
 ros::Publisher g_estop_pub;
 ros::Publisher g_status_pub;
+ros::ServiceClient g_resetOdrive;
+
+void resetOdrives()
+{
+  std_srvs::Empty msg;
+
+  if (g_resetOdrive.call(msg))
+  {
+    ROS_INFO("[suii_lowlevel] send reset to odrives");
+  }
+  else
+  {
+    ROS_ERROR("[suii_lowlevel] Failed to call service reset to odrives");
+    return 1;
+  }
+  
+}
 
 int main(int argc, char **argv)
 {
@@ -76,6 +97,7 @@ int main(int argc, char **argv)
     ROS_INFO("connected to lowLevelController");
     g_estop_pub = n.advertise<std_msgs::Bool>("estop", 50);
     g_status_pub = n.advertise<suii_lowlevel::suii_status>("lowlevel_status", 50);
+    g_resetOdrive = n.serviceClient<std_srvs::Empty>("/motor/bootup");
     
     
     ros::Rate r(100); 
@@ -113,6 +135,20 @@ int main(int argc, char **argv)
 
             g_estop_pub.publish(estopMsg);
             g_status_pub.publish(statusMsg);
+
+            if(statusMsgSerial.state == 3)
+            {
+              if(!g_isActive)
+              {
+                g_isActive = true;
+                resetOdrives();
+              }
+            }
+            else
+            {
+              g_isActive = false;
+            }
+
             break;
           }
           default:
