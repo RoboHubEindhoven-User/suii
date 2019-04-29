@@ -1,4 +1,42 @@
 <?xml version="1.0"?>
 <launch>
 	<include file="$(find suii_description)/launch/display.launch" />
+	<node name="hokuyo_front" pkg="urg_node" type="urg_node" respawn="true" output="screen">
+		<remap from="/scan" to="/scan_front"/>
+		<!-- Starts up faster, but timestamps will be inaccurate. -->
+		<!--<param name="calibrate_time" type="bool" value="true"/>-->
+		<param name="ip_address" type="string" value="192.168.2.102"/>
+		<param name="frame_id" type="string" value="lidar_front_real"/>
+		<param name="angle_min" type="double" value="-2.3561944902"/>
+		<param name="angle_max" type="double" value="2.0943951024"/>
+	</node>
+	<node name="hokuyo_back" pkg="urg_node" type="urg_node" respawn="true" output="screen">
+		<remap from="/scan" to="/scan_back"/>
+		<!-- Starts up faster, but timestamps will be inaccurate. -->
+		<!--<param name="calibrate_time" type="bool" value="true"/>-->
+		<param name="ip_address" type="string" value="192.168.2.101"/>
+		<param name="frame_id" type="string" value="lidar_back_real" />
+		<param name="angle_min" type="double" value="-2.3561944902"/>
+		<param name="angle_max" type="double" value="2.0943951024"/>
+	</node>
+
+	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
+                <param name="destination_frame" value="/lidar_combined"/>
+                <param name="cloud_destination_topic" value="/merged_laser_cloud"/>
+                <param name="scan_destination_topic" value="/scan_combined"/>
+                <param name="laserscan_topics" value ="/scan_front /scan_back" /> <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+
+                <param name="angle_min" value="-3.14"/>
+                <param name="angle_max" value="3.14"/>
+        </node>
+	
+	<node pkg="tf" type="static_transform_publisher" name="hokuyo_front_broadcasters"
+                args="0 0 0 0 0 0 lidar_front lidar_front_real 100" />
+        <node pkg="tf" type="static_transform_publisher" name="hokuyo_back_broadcasters"
+                args="0 0 0 0 0 0 lidar_back lidar_back_real 100" />
+	<node pkg="tf" type="static_transform_publisher" name="hokuyo_combined_broadcasters"
+                args="0 0 0.15 0 0 0 base_link lidar_combined 100" />
+
+
+	<node pkg="suii_drivers" type="motors.py" name="motors" output="screen" />
 </launch>
