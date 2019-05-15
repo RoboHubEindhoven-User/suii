@@ -59,11 +59,15 @@ bool g_isActive = false;
 ros::Publisher g_estop_pub;
 ros::Publisher g_status_pub;
 ros::ServiceClient g_resetOdrive;
+//ros::Rate g_r;
 
 void resetOdrives()
 {
+  ROS_INFO("[suii_lowlevel] send reset in 5 sec!");
   std_srvs::Empty msg;
 
+  ros::Duration(5.0).sleep();
+  ROS_INFO("[suii_lowlevel] resetting odrives");
   if (g_resetOdrive.call(msg))
   {
     ROS_INFO("[suii_lowlevel] send reset to odrives");
@@ -71,7 +75,6 @@ void resetOdrives()
   else
   {
     ROS_ERROR("[suii_lowlevel] Failed to call service reset to odrives");
-    return 1;
   }
   
 }
@@ -82,7 +85,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n;
   ros::NodeHandle priv_nh("~");
   ROS_INFO("starting suii_lowlevel");
-  
+  ros::Rate r(100);
   std::string port;
   int baud_rate;
 
@@ -97,10 +100,9 @@ int main(int argc, char **argv)
     ROS_INFO("connected to lowLevelController");
     g_estop_pub = n.advertise<std_msgs::Bool>("estop", 50);
     g_status_pub = n.advertise<suii_lowlevel::suii_status>("lowlevel_status", 50);
-    g_resetOdrive = n.serviceClient<std_srvs::Empty>("/motor/bootup");
+    g_resetOdrive = n.serviceClient<std_srvs::Empty>("/motors/bootup");
     
-    
-    ros::Rate r(100); 
+     
     while (ros::ok()) 
     {
       ros::spinOnce();

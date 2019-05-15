@@ -39,4 +39,7 @@
 
 
 	<node pkg="suii_drivers" type="motors.py" name="motors" output="screen" />
+	<node pkg="suii_lowlevel" type="suii_lowlevel" name="lowlevelcontroller" output="screen">
+		<param name="port" value="/dev/ttyLLC" />
+	</node>
 </launch>

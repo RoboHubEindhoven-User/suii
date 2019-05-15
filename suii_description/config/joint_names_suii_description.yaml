@@ -1,1 +1,1 @@
-controller_joint_names: ['base_wheel_right_back', 'base_wheel_right_front', 'base_wheel_left_back', 'base_wheel_left_front', ]
+controller_joint_names: ['base_wheel_right_back', 'base_wheel_right_front', 'base_wheel_left_back', 'base_wheel_left_front', ur3/shoulder_pan_joint, ur3/shoulder_lift_joint, ur3/elbow_joint, ur3/wrist_1_joint, ur3/wrist_2_joint, ur3/wrist_3_joint ]

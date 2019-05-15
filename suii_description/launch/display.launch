@@ -4,16 +4,17 @@
   <arg
     name="gui"
     default="False" />
-  <param
-    name="robot_description"
-    textfile="$(find suii_description)/urdf/suii_description.urdf" />
+  <param 
+    name="robot_description" 
+    command="$(find xacro)/xacro '$(find suii_description)/urdf/suii_description.urdf.xacro'" />
+
   <param
     name="use_gui"
     value="$(arg gui)" />
-  <node
+  <!--<node
     name="joint_state_publisher"
     pkg="joint_state_publisher"
-    type="joint_state_publisher" />
+    type="joint_state_publisher" /> -->
   <node
     name="robot_state_publisher"
     pkg="robot_state_publisher"

@@ -32,7 +32,7 @@ class Motors(object):
         self.odom_topic = rospy.Publisher("/odom", Odometry, queue_size=1)
         self.tf_broadcast = TransformBroadcaster(queue_size=10)
         self.timestamp = time.time()
-        rospy.Timer(rospy.Duration(secs=0, nsecs=10000), callback=self.getOdomDelta)
+        rospy.Timer(rospy.Duration(secs=0, nsecs=20000), callback=self.getOdomDelta)
 
         rospy.Service("/motors/bootup", Empty, self.calibrateMotors)
         rospy.Service("/motors/reboot", Empty, self.rebootMotors)
@@ -104,6 +104,12 @@ class Motors(object):
         self.odrv0 = serial.Serial("/dev/ttyODRV_F", 115200)
         self.odrv1 = serial.Serial("/dev/ttyODRV_B", 115200)
         time.sleep(2)
+        self.odrv0.write("sb\n")
+        self.odrv1.write("sb\n")
+        time.sleep(5)
+        self.odrv0 = serial.Serial("/dev/ttyODRV_F", 115200)
+        self.odrv1 = serial.Serial("/dev/ttyODRV_B", 115200)
+        time.sleep(2)
         self.bootup()
         self.ready = True
         return EmptyResponse()
@@ -154,6 +160,8 @@ class Motors(object):
                 self.ready = False
                 self.odrv0 = None
                 self.odrv1 = None
+            except AttributeError:
+                return
 
     def vectorToSpeed(self,vec):
         qua = [0.0, 0.0, 0.0, 0.0] 
@@ -229,6 +237,8 @@ class Motors(object):
             self.ready = False
             self.odrv0 = None
             self.odrv1 = None
+	except AttributeError:
+            encDat = None
         return encDat
 
 if __name__ == "__main__":

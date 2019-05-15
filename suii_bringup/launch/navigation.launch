@@ -1,8 +1,12 @@
 <launch>
-  <arg name="map_file" default="normal_map"/>
+  <arg name="map_obstacle" default="arena2_keepout"/>
+  <arg name="map_amcl" default="arena2_clean"/>
 
   <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server" args="/home/suii/maps/$(arg map_file).yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="/home/suii/maps/$(arg map_obstacle).yaml">
+    <remap from="map" to="map_obs" />
+  </node>
+  <node name="map_server_keepout" pkg="map_server" type="map_server" args="/home/suii/maps/$(arg map_amcl).yaml" />
 
   <!-- Run Move Base -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -31,7 +35,7 @@
     <param name="initial_pose_y" value="2"/>
     <param name="initial_pose_a" value="0"/>
 
-    <remap from="scan" to="scan_front" />
+    <remap from="scan" to="scan_combined" />
   </node>
-  <node pkg="suii_drivers" type="clear_costmaps.py" name="refresh_costmap" output="screen" />
+
 </launch>

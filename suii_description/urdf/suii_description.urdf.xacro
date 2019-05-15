@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="suii" >
+
+  <!-- base -->
+  <xacro:include filename="$(find suii_description)/urdf/suii_base.urdf.xacro" />
+  
+  <!-- common stuff -->
+  <xacro:include filename="$(find suii_description)/urdf/Arm/common.gazebo.xacro" />
+
+  <!-- ur3 -->
+
+  <xacro:include filename="$(find suii_description)/urdf/Arm/ur3.urdf.xacro" />
+  
+  <xacro:suii_base/>
+
+  <xacro:ur3_robot parent="arm_placeholder" prefix="ur3/" joint_limited="false">
+	<origin xyz="0.0 0.0 -0.02" rpy="0.0 0.0 -1.5707963267949" />
+  </xacro:ur3_robot>
+
+  
+  <!-- gripper -->
+  <!--
+  <xacro:include filename="$(find urdf_tutorial_adding)/urdf/gripper.urdf" />
+  <xacro:gripper_v5 parent="ee_link" >
+	<origin xyz="0.055 0.0 0.015" rpy="0 0 1.5708" />
+  </xacro:gripper_v5> 
+  -->
+  
+  
+
+</robot>
