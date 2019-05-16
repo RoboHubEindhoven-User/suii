@@ -13,6 +13,7 @@
   <exec_depend>suii_bringup</exec_depend>
   <exec_depend>suii_drivers</exec_depend>
   <exec_depend>suii_lowlevel</exec_depend>
+  <exec_depend>suii_msgs</exec_depend>
 
   <export>
     <metapackage />
