@@ -15,6 +15,7 @@ add_message_files(
 
 add_service_files(
     FILES
+    DistanceToGoal.srv
     ManipulationAction.srv
     ManipulationPose.srv
     NavigationGoal.srv
