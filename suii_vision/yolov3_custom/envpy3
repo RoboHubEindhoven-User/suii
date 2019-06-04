@@ -1,0 +1,5 @@
+#! /bin/bash
+
+#Reset binary paths, set python 3 library pointer
+export PATH='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games'
+export PYTHONPATH='/usr/local/lib/python3.5/dist-packages:/home/suii/.local/lib/python3.5/site-packages'
