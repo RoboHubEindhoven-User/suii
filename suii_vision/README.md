@@ -60,7 +60,13 @@ The config file is needed to run the YOLO detection. For YOLOv3 there are 3 diff
 * yolov3-spp	(this is the middle version of YOLO which balances inbetween speed and accuracy)
 * yolov3-tiny	(this is the smalles version of YOLO, which is the most inaccurate but can run on almost every graphics card)
 
+**Data file**
 
+This is a file containing the filepaths to all the necessary folders, for example the amount of `classes`, the filepath to the `train` folder where all the pictures are stored that you wish to train with, the filepath to the `valid` folder where all the pictures are that contain the objects but you do not want to train with, the filepath to the `.names` file where all the names of the classes are defined and the filepath to the `backup` folder where the training `.weight` files are stored.
+
+**Weights file**
+
+This is the file where the weights are stored from the custom dataset that you trained. This is needed for the detector to detect the trained objects.
 
 ### Troubleshoot
 
