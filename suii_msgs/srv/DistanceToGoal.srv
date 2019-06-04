@@ -1,0 +1,5 @@
+#Robot calculate euclidean distance action service file: /get_distance
+int8 type
+int8 instance_id
+---
+float64 distance
