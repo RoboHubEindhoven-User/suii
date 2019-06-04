@@ -52,6 +52,16 @@ python3 test.py
 To change the Config file which is used change the filepath in `defaults_dicts` in the `yolo.py` file to the `.cfg` file that you want to use. This is the same for the `.data` and `.weights` files.
 Furthermore you can change the Confidence threshold `(conf_thresh)` value and the Non-maximum supression threshold `(nms_thresh)`.
 
+**Config file**
+
+The config file is needed to run the YOLO detection. For YOLOv3 there are 3 different versions;
+
+* yolov3	(this is the full YOLO version which needs the most power to run, in theory it is the slowest but the most accurate but that depends on which graphics card you are using)
+* yolov3-spp	(this is the middle version of YOLO which balances inbetween speed and accuracy)
+* yolov3-tiny	(this is the smalles version of YOLO, which is the most inaccurate but can run on almost every graphics card)
+
+
+
 ### Troubleshoot
 
 It might occure that the error occures that it cannot find opencv installed for python3, this might be due to ROS or other installations. When this happens run in the yolov3_custom folder the following command and retry after:
