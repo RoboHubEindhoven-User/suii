@@ -35,12 +35,6 @@ For cloning [ultralytics python yolov3](https://github.com/ultralytics/yolov3) u
 git clone https://github.com/ultralytics/yolov3.git
 ```
 
-For cloning this custom version based on the [ultralytics](https://github.com/ultralytics/yolov3) version use:
-
-```bash
-git clone https://github.com/RoboHubEindhoven/YOLO_Object_Detection.git
-```
-
 ## Usage
 
 ### Execute
