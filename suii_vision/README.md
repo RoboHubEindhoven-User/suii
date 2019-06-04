@@ -1,6 +1,6 @@
 # YOLO Object detection 
 
-This is a repository for the YOLO object detection for the Robocup@work competition that RoboHubEindhoven participates in. This repository consists of the [ultralytics python yolov3](https://github.com/ultralytics/yolov3) with some custom adjustments. If you want to learn more of how the YOLO object detection works, please check out our [wiki](https://github.com/RoboHubEindhoven/YOLO_Object_Detection/wiki).
+This is a repository for the YOLO object detection for the Robocup@work competition that RoboHubEindhoven participates in. This repository consists of the [ultralytics python yolov3](https://github.com/ultralytics/yolov3) with some custom adjustments. If you want to learn more of how the YOLO object detection works, please check out our [wiki](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection).
 
 **Below are some of the results on a custom trained database with the Robocup@work objects:**
 
@@ -33,12 +33,6 @@ For cloning [ultralytics python yolov3](https://github.com/ultralytics/yolov3) u
 
 ```bash
 git clone https://github.com/ultralytics/yolov3.git
-```
-
-For cloning this custom version based on the [ultralytics](https://github.com/ultralytics/yolov3) version use:
-
-```bash
-git clone https://github.com/RoboHubEindhoven/YOLO_Object_Detection.git
 ```
 
 ## Usage
