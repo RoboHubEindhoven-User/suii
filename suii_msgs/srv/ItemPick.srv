@@ -1,0 +1,6 @@
+# Suii Item Manipulation driver service file: /pickItem /placeItem
+uint16 itemID
+bool onRobot
+---
+bool sucess
+uint8 error
