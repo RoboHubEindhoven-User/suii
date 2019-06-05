@@ -1,6 +1,6 @@
 # YOLO Object detection 
 
-This is a repository for the YOLO object detection for the Robocup@work competition that RoboHubEindhoven participates in. This repository consists of the [ultralytics python yolov3](https://github.com/ultralytics/yolov3) with some custom adjustments. If you want to learn more of how the YOLO object detection works and for how to use guides, please check out our [wiki](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection).
+This is a repository for the YOLO object detection for the Robocup@work competition that RoboHubEindhoven participates in. This repository consists of the [ultralytics python yolov3](https://github.com/ultralytics/yolov3) with some custom adjustments. If you want to learn more of how the YOLO object detection works and for how to use guides, please check out our [vision wiki](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection). At the end of the page where you land on you can find the links to all the guides you need to use the YOLO object detection.
 
 **Below are some of the results on a custom trained database with the Robocup@work objects:**
 
@@ -75,6 +75,8 @@ It might occure that the error occures that it cannot find opencv installed for 
 ```bash
 source envpy3
 ```
+
+**Note:** You will have to change the filepath to the correct folder in the envpy3 code!
 
 ### Pretrained Weights
 Below are the links to the pretrained weights:
