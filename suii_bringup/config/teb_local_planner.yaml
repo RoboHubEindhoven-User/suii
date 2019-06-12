@@ -1,14 +1,13 @@
 TebLocalPlannerROS:
    
  # Trajectory
-  
  teb_autosize: True
  dt_ref: 0.2
  dt_hysteresis: 0.1
  global_plan_overwrite_orientation: True
  allow_init_with_backwards_motion: True
  max_global_plan_lookahead_dist: 10.0
- feasibility_check_no_poses: 5
+ feasibility_check_no_poses: 50
     
  # Robot
          
@@ -34,24 +33,35 @@ TebLocalPlannerROS:
     
  # Obstacles
     
- min_obstacle_dist: 0.24 #0.24 This value must also include our robot radius, since footprint_model is set to "point".
+ min_obstacle_dist: 0.215 #0.24 This value must also include our robot radius, since footprint_model is set to "point".
+ inflation_dist: 1.0
+ dynamic_obstacle_inflation_dist: 1.0
  include_costmap_obstacles: True
  costmap_obstacles_behind_robot_dist: 5.0
  obstacle_poses_affected: 30
- costmap_converter_plugin: ""
+ costmap_converter_plugin: "costmap_converter::CostmapToPolygonsDBSConcaveHull" 
  costmap_converter_spin_thread: True
- costmap_converter_rate: 5
+ costmap_converter_rate: 10
+ obstacle_association_force_inclusion_factor: 1.5
+ obstacle_association_cutoff_factor: 3
 
- # Optimization
-    
- no_inner_iterations: 5
- no_outer_iterations: 4
+ # Costmap converter | concave polygon
+ costmap_converter/CostmapToPolygonsDBSConcaveHull:
+  cluster_max_distance: 0.3
+  cluster_min_pts: 2
+  cluster_max_pts: 10
+  convex_hull_min_pt_separation: 0.1
+  concave_hull_depth: 2.0
+
+ # Optimization  
+ no_inner_iterations: 5.0
+ no_outer_iterations: 10.0
  optimization_activate: True
  optimization_verbose: False
  penalty_epsilon: 0.1
  weight_max_vel_x: 2
  weight_max_vel_y: 2
- weight_max_vel_theta: 1
+ weight_max_vel_theta: 2
  weight_acc_lim_x: 1
  weight_acc_lim_y: 1
  weight_acc_lim_theta: 1

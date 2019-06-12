@@ -11,6 +11,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
     FILES
     VisionScanObject.msg
+    SuiiTask.msg
+    SuiiTaskList.msg
 )
 
 add_service_files(
@@ -21,6 +23,9 @@ add_service_files(
     NavigationGoal.srv
     NavigationRepose.srv
     VisionScan.srv
+    ItemPick.srv
+    ItemPlace.srv 
+    ItemFindhole.srv
 )
 
 generate_messages(

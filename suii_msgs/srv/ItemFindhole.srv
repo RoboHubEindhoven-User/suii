@@ -1,0 +1,5 @@
+# Suii Item Manipulation
+uint16 itemID
+---
+bool sucess
+uint8 error

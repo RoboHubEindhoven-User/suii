@@ -4,6 +4,8 @@ global_costmap:
   update_frequency: 3.0
   publish_frequency: 3.0
   static_map: true
+
+  robot_radius: 0.32
  
   transform_tolerance: 0.5
   plugins:
