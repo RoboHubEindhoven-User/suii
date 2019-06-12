@@ -31,10 +31,6 @@
     <!-- We have a holonomic robot! Overwrite yaml config here! -->
     <param name="odom_model_type" value="omni"/>
    
-    <param name="initial_pose_x" value="2"/>
-    <param name="initial_pose_y" value="2"/>
-    <param name="initial_pose_a" value="0"/>
-
     <remap from="scan" to="scan_combined" />
   </node>
 
