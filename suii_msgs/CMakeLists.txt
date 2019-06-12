@@ -26,6 +26,10 @@ add_service_files(
     ItemPick.srv
     ItemPlace.srv 
     ItemFindhole.srv
+    UpdateItems.srv
+    Item.srv
+    ItemDrive.srv
+    ItemMove.srv
 )
 
 generate_messages(

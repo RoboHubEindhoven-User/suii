@@ -1,0 +1,8 @@
+#goal definition
+int16 itemID
+---
+#result definition
+int16 status
+---
+#feedback
+int16 state
