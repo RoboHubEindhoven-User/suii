@@ -9,13 +9,14 @@ from std_srvs.srv import Empty, EmptyResponse
 from suii_msgs.srv import UpdateItems, UpdateItemsResponse
 from suii_msgs.srv import Item, ItemResponse
 from suii_msgs.srv import ItemMove, ItemMoveResponse, ItemMoveRequest
+from suii_msgs.srv import getFreeSpot, getFreeSpotResponse, getFreeSpotRequest
 
 from geometry_msgs.msg import Pose
 from geometry_msgs.msg import PoseStamped
 
 
 
-tolerance = 10 * 0.01 # 10cm
+tolerance = 0.02 # 2cm
 
 class ItemObject:
     def __init__(self, id, link,presision):
@@ -23,16 +24,17 @@ class ItemObject:
         self.link = link
         self.presision = presision
         self.pose = Pose()
+        self.spot = -1
 
 class myNode:
     def __init__(self, *args):
         self.onTableList = []
         self.onBackList = []
         self.HoleList = []
+        self.freeSpotList = [True,True,True]
         self.baseName = "base_link"
 
     def addTF(self, pose , name):
-        print(pose[0])
         try:
             self.TFbroadcaster.sendTransform(
                 translation=pose[0],
@@ -44,6 +46,16 @@ class myNode:
             return True
         except tf.Exception:
             return False
+
+    def getFreeSpot(self):
+        if len(self.onBackList) >= 3:
+            return False
+        i = 1
+        for spot in self.freeSpotList:
+            if spot:
+                return i
+            i+=1
+        return False
 
     def isSame(self,tf1,tf2): #calculate distance between two tf frames and determine if they are closs enough to be the same object 
         distance = 0.0
@@ -110,11 +122,6 @@ class myNode:
     def handle_moveItem(self,req):
         rospy.loginfo("move Item: {0} to Robot: {1}".format(req.itemID,req.toRobot))
         response = ItemMoveResponse(True)
-
-# uint16 itemID
-# bool toRobot
-# string newLink
-
         if not req.toRobot:
             sourceList = self.onBackList
             targetList = self.onTableList
@@ -125,6 +132,12 @@ class myNode:
                 print("robot full")
                 response.sucess = False
                 return response
+        
+        spot = self.getFreeSpot()
+        if spot is False:
+            response.sucess = False
+            return response
+        self.freeSpotList[spot-1] = False
 
         item = ItemObject(req.itemID,"",0)
         listIndex = self.findInList(item,sourceList,False)
@@ -133,8 +146,10 @@ class myNode:
             item.pose = self.TFlistener.lookupTransform(self.baseName,req.newLink, rospy.Time(0))
         except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             print("failed transform")
+        item.spot = spot
         targetList.append(item)
         del sourceList[listIndex] 
+
         self.addTF(item.pose,item.link)   
         return response
 
@@ -187,24 +202,41 @@ class myNode:
         if listIndex == -1:
             response.sucess = False
             return response
+        self.freeSpotList[sourceList[listIndex].spot-1] = True # free spot in freespotList
         del sourceList[listIndex]
         return response
+
+    def handle_getFreeSpot(self, req):
+        rospy.loginfo("get free spot")
+        response = getFreeSpotResponse(False,0)
+        spot = self.getFreeSpot()
+        if spot is False:
+            return response
+        response.spot = spot
+        response.sucess = True
+        return response
+
 
     def handle_printLists(self,req): 
         rospy.loginfo("print list") 
         print("##########################")
-        print("onTableList size: {0}".format(len(self.onTableList)))
+        print("#onTableList size: {0}".format(len(self.onTableList)))
         for listItem in self.onTableList:
-            print(" item: id:{0}, link:{1}, presision:{2} ".format(listItem.id,listItem.link,listItem.presision))
+            print(" -> item: id:{0}, link:{1}, presision:{2} ".format(listItem.id,listItem.link,listItem.presision))
             self.addTF(listItem.pose,listItem.link)   
-        print("onBackList size: {0}".format(len(self.onBackList)))
+        print("#onBackList size: {0}".format(len(self.onBackList)))
         for listItem in self.onBackList:
-            print(" item: id:{0}, link:{1}, presision:{2} ".format(listItem.id,listItem.link,listItem.presision))
+            print(" -> item: id:{0}, link:{1}, presision:{2} spot: {3}".format(listItem.id,listItem.link,listItem.presision,listItem.spot))
             self.addTF(listItem.pose,listItem.link)   
-        print("HoleList size: {0}".format(len(self.HoleList)))
+        print("#HoleList size: {0}".format(len(self.HoleList)))
         for listItem in self.HoleList:
-            print(" item: id:{0}, link:{1}, presision:{2} ".format(listItem.id,listItem.link,listItem.presision))
+            print(" -> item: id:{0}, link:{1}, presision:{2} ".format(listItem.id,listItem.link,listItem.presision))
             self.addTF(listItem.pose,listItem.link)
+        print("#FreeSpot list ")
+        i = 1
+        for spot in self.freeSpotList:
+            print(" -> {0}: {1}".format(i,spot))
+            i+=1
         print("##########################")
         return EmptyResponse()
 
@@ -216,6 +248,8 @@ class myNode:
         s = rospy.Service('items/getItem', Item, self.handle_getItem)
         s = rospy.Service('items/getHole', Item, self.handle_getHole)
         s = rospy.Service('items/removeItem', Item, self.handle_removeItem)
+        s = rospy.Service('items/getFreeSpot', getFreeSpot, self.handle_getFreeSpot)
+        
         
 
         rospy.init_node('itemManager', anonymous=True)

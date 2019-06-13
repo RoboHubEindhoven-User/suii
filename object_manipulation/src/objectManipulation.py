@@ -19,6 +19,7 @@ from std_srvs.srv import Empty, EmptyResponse
 from suii_msgs.srv import UpdateItems, UpdateItemsResponse, UpdateItemsRequest
 from suii_msgs.srv import Item, ItemResponse, ItemRequest
 from suii_msgs.srv import ItemMove, ItemMoveResponse, ItemMoveRequest
+from suii_msgs.srv import getFreeSpot, getFreeSpotResponse, getFreeSpotRequest
 
 class objectManipulation:
     def __init__(self, *args):
@@ -29,6 +30,7 @@ class objectManipulation:
         #Vision
         self.vision_scan = rospy.ServiceProxy('/get_scan_all', VisionScan)
         #ItemManager
+        self.item_getFreeSpot = rospy.ServiceProxy('items/getFreeSpot', getFreeSpot)
         self.item_updateItems = rospy.ServiceProxy('items/updateItems', UpdateItems)
         self.item_clearItems = rospy.ServiceProxy('items/clearItems', Empty)
         self.item_removeItem = rospy.ServiceProxy('items/removeItem',Item)
@@ -38,31 +40,39 @@ class objectManipulation:
         
         
 
-    def drive(self):
-        self.item_clearItems()
-        self.UR3_look(ManipulationPoseRequest(1))
-        pass
-    
-    def pick(self, link):
-        self.UR3_look(ManipulationPoseRequest(1))
+    def drive(self): # make robot ready to drive
+        try:
+            self.item_clearItems() # clear table list
+            self.UR3_look(ManipulationPoseRequest(0)) #set arm in drive position
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
+
+    def pick(self, link,id,onRobot):
         self.UR3_pick(ManipulationActionRequest(link=link))
+        if onRobot:
+            self.item_removeItem(ItemRequest(id,onRobot)) # remove item from list back of robot
+
 
     def place(self,link):
-        self.UR3_place(ManipulationActionRequest(link=link))
+        try:
+            self.UR3_place(ManipulationActionRequest(link=link))
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
 
-    def placeOnRobot(self,id):
-        spot = 2
+
+    def placeOnRobot(self,id): 
+        response = self.item_getFreeSpot()
+        if not response.sucess:
+            return False
+        spot = response.spot
         name = "HOLDER_{0}".format(spot)
-        self.place(name)
-        request = ItemMoveRequest()
-        request.itemID = id
-        request.toRobot = True
-        request.newLink = name
-        self.item_moveItem(request)
+        print("place on robot: {0}".format(name))
+        self.place(name) 
+        self.item_moveItem(ItemMoveRequest(id, True, name))#id, toRobot, newlink
         
 
     def placeOnTable(self,link):
-        self.place("ONTABLE")
+        self.place("table")
 
     def placeOnHole(self,link,id):
         hole = self.findHole()
@@ -71,7 +81,7 @@ class objectManipulation:
         self.place(hole)
         return True
 
-    def findHole(self,itemID):
+    def findHole(self,itemID): # Find hole Behavior (curently mostly the same as findItem)
         item = self.getHole(itemID)
         print(item)
         if item:
@@ -88,50 +98,44 @@ class objectManipulation:
                 break
         return False
 
-    def findItem(self,itemID, onRobot):
+    def findItem(self,itemID, onRobot): # Find item Behavior:
         
-        item = self.getItem(itemID,onRobot)
-        print(item)
-        if item:
+        item = self.getItem(itemID,onRobot) # see if item in known before scanning
+        #print(item)
+        if item: # if it has a item return it.
             return item
+        if onRobot: #if the item is`t found but it should be on the robot there is no point in looking for it on the table. return False
+            return False
+
+        #look for item on table    
         i = 0
         while True:
             self.scan(i,1)
             item = self.getItem(itemID,onRobot)
-            print(item)
-            if item:
+            if item: #if item is found
                 return item
             i+=1
-            if i >= 3:
+            if i >= 3: # max 3 scans  
                 break
         return False
 
     def getItem(self,itemID, onRobot):
-        request = ItemRequest()
-        request.itemID = itemID
-        request.onRobot = onRobot
-        response = self.item_getItem(request)
+        response = self.item_getItem(ItemRequest(itemID,onRobot)) # id, onRobot
         if response.sucess:
             return response.link
         return False
     
     def getHole(self,itemID):
-        request = ItemRequest()
-        request.itemID = itemID
-        request.onRobot = False
-        response = self.item_getHole(request)
+        response = self.item_getHole(ItemRequest(itemID,False))# id, onRobot
         if response.sucess:
             return response.link
         return False
 
     def scan(self, position, height ): # position: 1 mid, 2 left, 3 right;  
-        #move to pose
         moveID = 1 + position + (height*3)
-        self.UR3_look(ManipulationPoseRequest(moveID))
-        #VisionScan
-        visionResponse = self.vision_scan()
-        #updateItemlists
-        self.item_updateItems(UpdateItemsRequest(visionResponse.result))
+        self.UR3_look(ManipulationPoseRequest(moveID)) #move to scan pose.
+        visionResponse = self.vision_scan()#let vision look for items.
+        self.item_updateItems(UpdateItemsRequest(visionResponse.result)) #update the list with known Items
 
 
     
@@ -151,7 +155,7 @@ class myNode:
         itemLink = self.robot.findItem(req.itemID, req.onRobot)
         if itemLink is False:
             return ItemPickResponse(sucess = False) 
-        self.robot.pick(itemLink)
+        self.robot.pick(itemLink,req.itemID,req.onRobot)
         return ItemPickResponse(sucess = True)
 
     def handle_place(self,req):

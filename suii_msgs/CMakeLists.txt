@@ -30,6 +30,7 @@ add_service_files(
     Item.srv
     ItemDrive.srv
     ItemMove.srv
+    getFreeSpot.srv
 )
 
 generate_messages(
