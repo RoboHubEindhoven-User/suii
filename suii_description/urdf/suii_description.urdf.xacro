@@ -15,7 +15,7 @@
   <xacro:suii_base/>
 
   <xacro:ur3_robot parent="arm_placeholder" prefix="ur3/" joint_limited="false">
-	<origin xyz="0.0 0.0 -0.02" rpy="0.0 0.0 -1.5707963267949" />
+	<origin xyz="0.0 0.0 0.0207767" rpy="0.0 0.0 -1.5707963267949" />
   </xacro:ur3_robot>
 
   
