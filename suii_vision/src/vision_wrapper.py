@@ -5,17 +5,41 @@ import socket
 from threading import Lock
 import struct
 import json
+import math
 
 import rospy
 import tf
-from suii_msgs.srv import VisionScan
+from suii_msgs.srv import VisionScan, VisionScanResponse
 from suii_msgs.msg import VisionScanObject
 from std_srvs.srv import Empty
 from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import Float32
 
 VisionMsg = collections.namedtuple("VisionMsg", ["id", "code", "body"])
 _ids = {
-
+    "F20_20_B": 1,
+    "F20_20_G": 2,
+    "S40_40_B": 3,
+    "S40_40_G": 4,
+    "M20_100": 5,
+    "M20": 6,
+    "M30": 7,
+    "R20": 8,
+    "Bearing_Box": 9,
+    "Bearing": 10,
+    "Axis": 11,
+    "Distance_Tube": 12,
+    "Motor": 13,
+    "F20_20_Mall": 101,
+    "F40_40_Mall": 103,
+    "R20_Mall": 108,
+    "Bolt_Mall": 105,
+    "M20_Mall": 106,
+    "M30_Mall": 107,
+    "Red_Container_Top": 14,
+    "Red_Container_Front": 14,
+    "Blue_Container_Top": 15,
+    "Blue_Container_Front": 15
 }
 
 class VisionClient(object):
@@ -27,7 +51,7 @@ class VisionClient(object):
         try:
             self._shock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self._shock.setblocking(True)
-            self._shock.connect(address, 9001)
+            self._shock.connect((address, 9001))
             return True
         except Exception:
             self._shock_lock.acquire()
@@ -51,7 +75,7 @@ class VisionClient(object):
         else:
             j = ""
         sig = struct.pack('BBI', 0x00, function_id, len(j))
-        return sig+j
+        return sig + j
 
     def _decode(self, header, body):
         dj = json.loads(body)
@@ -61,7 +85,7 @@ class VisionClient(object):
     def _sync_data(self, data):
         try:
             self._shock.sendall(data)
-            rh = self._shock.recv(6)
+            rh = self._shock.recv(8)
             h = struct.unpack("BBI", rh)
             fragment = ""
             while len(fragment) < h[2]:
@@ -102,7 +126,7 @@ class Wrapper(object):
                 rm.link = ""
                 rm.sure = 0
             rr.append(rm)
-        return rr
+        return VisionScanResponse(rr)
 
     def addTF(self, x, y, z, name):
         try:
@@ -111,8 +135,12 @@ class Wrapper(object):
             p.header.frame_id = "camera"
             p.pose.position.x = x
             p.pose.position.y = y
-            p.pose.position.z = z
-            p.pose.orientation.w = 1.0
+            p.pose.position.z = -0.415
+            #Special angle changes
+            z = -z + (math.pi/2 * (abs(z)/z))
+            p.pose.orientation.z = tf.transformations.quaternion_from_euler(0, 0, z)[2]
+            p.pose.orientation.w = tf.transformations.quaternion_from_euler(0, 0, z)[3]
+
             pt = self.tfl.transformPose("ur3/base", p)
             self.tfb.sendTransform(
                 translation=[pt.pose.position.x, pt.pose.position.y, pt.pose.position.z],
@@ -124,3 +152,6 @@ class Wrapper(object):
             return True
         except tf.Exception:
             return False
+
+if __name__ == "__main__":
+    Wrapper()

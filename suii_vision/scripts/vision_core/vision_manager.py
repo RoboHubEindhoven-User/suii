@@ -14,7 +14,7 @@ class VisionManager(object):
     def __init__(self, port):
         #Build Socket
         self.connections = []
-        self.connections_limit = 1
+        self.connections_limit = 2
         self.shock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.shock.bind(("0.0.0.0", port))
         self.shock.setblocking(True)
@@ -29,7 +29,7 @@ class VisionManager(object):
         self.dev.start(config)
 
         self.signature_dict = {
-            0x00: self.spin_socket
+            0x00: self.scan_all
         }
 
         #Start modules
@@ -51,7 +51,6 @@ class VisionManager(object):
                 sockfd, _ = self.shock.accept()
                 if len(self.connections) < self.connections_limit:
                     self.connections.append(sockfd)
-                    self.connections_limit += 1
                     print("INFO: New client added")
                 else:
                     sockfd.close()
@@ -61,7 +60,7 @@ class VisionManager(object):
     
     def process_socket(self, sock):
         try:
-            hr = sock.recv(6)
+            hr = sock.recv(8)
             h = struct.unpack("BBI", hr)
             rb = ""
             while len(rb) < h[2]:
@@ -72,14 +71,13 @@ class VisionManager(object):
             else:
                 b = "Invalid function call"
                 write_back = struct.pack('BBI', 0xFF, h[1], len(b))
-                write_back = write_back + b
+                write_back += bytes(b, 'ascii')
             sock.sendall(write_back)
 
         except Exception as e:
             print("INFO: Client Disconnected")
             sock.close()
             self.connections.remove(sock)
-            continue
 
     def scan_all(self, data):
         mf = self.dev.wait_for_frames()
@@ -89,16 +87,19 @@ class VisionManager(object):
         bb = self.yolo.run(img_raw, False)
         ra = []
         for x in bb:
-            self.vision.build_center(x['n'], x['r'], img_raw)
-            dt = self.vision.build_view()
-            self.vision.reset_view()
+            self.post_processing.build_center(x[0], x[1], img_raw, False)
+            dt = self.post_processing.build_view()
+            self.post_processing.reset_view()
 
             if len(dt) > 0:
-                rb = {'x': dt[0][1], 'y':dt[0][2], 'z':dt[0][3], 'n':x['n'], 't':1}
+                rb = {'x': dt[0][1], 'y':dt[0][2], 'z':dt[0][3], 'n':x[0], 't':1}
             else:
-                rb = {'x':0.0, 'y':0.0, 'z':0.0, 'n':x['n'], 't':0}
+                rb = {'x':0.0, 'y':0.0, 'z':0.0, 'n':x[0], 't':0}
             ra.append(rb)
 
         js = json.dumps(ra)
         h = struct.pack('BBI', 0x01, 0x00, len(js))
-        return h + js
+        return h + bytes(js, 'ascii')
+
+if __name__ == "__main__":
+    v = VisionManager(9001)
