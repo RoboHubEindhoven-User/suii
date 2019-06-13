@@ -1,0 +1,7 @@
+# Suii Item
+uint16 itemID
+bool toRobot
+string newLink
+---
+bool sucess
+
