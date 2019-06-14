@@ -11,9 +11,9 @@ class Yolo(object):
             self.config_dict = config
         else:
             self.config_dict = {
-                "cfg": "/home/ros/workspace/yolov3_python/cfg/yolov3.cfg", # Config file path
-                "data": "/home/ros/workspace/yolov3_python/data/fcoco.data", # Data file path
-                "weights": "/home/ros/workspace/yolov3_python/weights/yolov3.weights", # Weights file path
+                "cfg": "/home/suii/workspace/yolo_test_stm/config/full_yolo.cfg", # Config file path
+                "data": "/home/suii/workspace/yolo_test_stm/config/full_yolo.data", # Data file path
+                "weights": "/home/suii/workspace/yolo_test_stm/tmp/full_yolo_70000.weights", # Weights file path
                 "conf_thres": 0.6, # Confidence threshold (accuracy)
                 "nms_thres": 0.2,  # Non-maximum supression threshold (compression, lower value = more compression)
                 "size": 416 # DO NOT CHANGE!!!
@@ -65,7 +65,7 @@ class Yolo(object):
                 # Add bbox to the image
                 label = '%s %.2f' % (self._classes[int(cls)], conf)
                 roi = (int(xyxy[0]), int(xyxy[1]), int(xyxy[2]), int(xyxy[3]))
-                rt.append((label, roi))
+                rt.append((self._classes[int(cls)], roi))
 
                 # Print results to screen
                 if debug:
