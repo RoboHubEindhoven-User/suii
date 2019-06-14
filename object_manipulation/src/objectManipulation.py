@@ -79,7 +79,7 @@ class objectManipulation:
     def placeOnHole(self,link,id):
         hole = self.findHole()
         if hole is False:
-            return False
+            return self.placeOnTable(link)
         self.place(hole)
         return True
 
