@@ -77,7 +77,7 @@ class objectManipulation:
         return True
 
     def placeOnHole(self,id):
-        hole = self.findHole()
+        hole = self.findHole(id)
         if hole is False:
             return self.placeOnTable()
         self.place(hole)
