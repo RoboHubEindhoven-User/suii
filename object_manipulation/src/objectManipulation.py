@@ -66,13 +66,15 @@ class objectManipulation:
             return False
         spot = response.spot
         name = "HOLDER_{0}".format(spot)
-        print("place on robot: {0}".format(name))
+        #print("place on robot: {0}".format(name))
         self.place(name) 
         self.item_moveItem(ItemMoveRequest(id, True, name))#id, toRobot, newlink
+        return True
         
 
     def placeOnTable(self,link):
         self.place("table")
+        return True
 
     def placeOnHole(self,link,id):
         hole = self.findHole()
@@ -83,14 +85,12 @@ class objectManipulation:
 
     def findHole(self,itemID): # Find hole Behavior (curently mostly the same as findItem)
         item = self.getHole(itemID)
-        print(item)
         if item:
             return item
         i = 0
         while True:
             self.scan(i,1)
             item = self.getHole(itemID)
-            print(item)
             if item:
                 return item
             i+=1
@@ -151,7 +151,7 @@ class myNode:
         self.robot = objectManipulation()
 
     def handle_pick(self,req):   
-
+        print("pick called {}".format(req))
         itemLink = self.robot.findItem(req.itemID, req.onRobot)
         if itemLink is False:
             return ItemPickResponse(sucess = False) 
@@ -159,29 +159,30 @@ class myNode:
         return ItemPickResponse(sucess = True)
 
     def handle_place(self,req):
+        print("place called {}".format(req))
         response = ItemPlaceResponse(sucess = False)
         if req.onRobot:
-            self.robot.placeOnRobot(req.itemID)
+            response.sucess = self.robot.placeOnRobot(req.itemID)
         else:
             if req.inHole:
                 response.sucess = self.robot.placeOnHole(req.itemID)
             else:
-                self.robot.placeOnTable("getItem")
+                response.sucess = self.robot.placeOnTable("getItem")
         return response
 
     def handle_findhole(self,req):  
+        print("findhole called")
         hole = self.robot.findHole(req.itemID)
         if hole is False:
             return ItemFindholeResponse(sucess = False)
         return ItemFindholeResponse(sucess = True)
 
     def handle_drive(self,req):
+        print("drive called")
         self.robot.drive()
         return ItemDriveResponse(sucess = True)
 
     def objectHandeler(self):
-        
-
         rate = rospy.Rate(10) # 10hz
         while not rospy.is_shutdown():
             rate.sleep()
