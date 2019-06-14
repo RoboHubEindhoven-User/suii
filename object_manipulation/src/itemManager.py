@@ -239,6 +239,14 @@ class myNode:
             i+=1
         print("##########################")
         return EmptyResponse()
+    
+    def handle_reset(self,req):
+        rospy.loginfo("reset itemLists")
+        del self.onTableList[:] #clear ontable list 
+        del self.HoleList[:] #clear ontable list 
+        del self.onBackList[:] #clear onBackList list 
+        self.freeSpotList = [True,True,True]
+        return EmptyResponse()
 
     def itemHandeler(self):
         s = rospy.Service('items/updateItems', UpdateItems, self.handle_updateItems)
@@ -249,6 +257,7 @@ class myNode:
         s = rospy.Service('items/getHole', Item, self.handle_getHole)
         s = rospy.Service('items/removeItem', Item, self.handle_removeItem)
         s = rospy.Service('items/getFreeSpot', getFreeSpot, self.handle_getFreeSpot)
+        s = rospy.Service('items/reset', Empty, self.handle_reset)
         
         
 

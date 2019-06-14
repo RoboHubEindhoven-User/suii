@@ -72,14 +72,14 @@ class objectManipulation:
         return True
         
 
-    def placeOnTable(self,link):
+    def placeOnTable(self):
         self.place("table")
         return True
 
-    def placeOnHole(self,link,id):
+    def placeOnHole(self,id):
         hole = self.findHole()
         if hole is False:
-            return self.placeOnTable(link)
+            return self.placeOnTable()
         self.place(hole)
         return True
 
@@ -167,7 +167,7 @@ class myNode:
             if req.inHole:
                 response.sucess = self.robot.placeOnHole(req.itemID)
             else:
-                response.sucess = self.robot.placeOnTable("getItem")
+                response.sucess = self.robot.placeOnTable()
         return response
 
     def handle_findhole(self,req):  
