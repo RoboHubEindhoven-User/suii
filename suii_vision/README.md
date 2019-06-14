@@ -10,7 +10,7 @@ This is a repository for the YOLO object detection for the Robocup@work competit
 
 ## Getting started
 
-For this project ubuntu 16.04 LTS is used with [CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-downloads).
+For this project ubuntu 16.04 LTS is used with [nVidia CUDA toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (For this you need an nVidia graphics card in the desktop we have, an gtx 1080 TI is used)
 
 ### Prerequisites
 
