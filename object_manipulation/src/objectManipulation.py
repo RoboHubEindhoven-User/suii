@@ -85,8 +85,10 @@ class objectManipulation:
 
     def placeOnTable(self):
         
+        dropDistance = 0.15
+
         x = 0.7 # 0.5 meter in front of robot (base_link)
-        y = -0.1 + (0.1*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
+        y = -dropDistance + (dropDistance*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
         z = (self.tableHeight*0.01) + 0.04 # table height + 4 cm 
 
         pose = [[x,y,z],[0,0,0,1]]
