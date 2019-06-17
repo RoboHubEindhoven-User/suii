@@ -176,6 +176,11 @@ class myNode:
     def handle_getHole(self,req):
         rospy.loginfo("get Hole")
         response = ItemResponse(True,0,"")
+        id = req.itemID
+        if id == 2:
+            id = 1
+        if id == 4:
+            id = 3
         item = ItemObject(req.itemID,"",0)
 
         listIndex = self.findInList(item,self.HoleList,False)
