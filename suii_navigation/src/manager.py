@@ -24,6 +24,7 @@ class NavigationManager(object):
         self.tf_listener = TransformListener()
 
         self.goal = MoveBaseGoal()
+	#rospy.Timer(rospy.Duration(secs=3,nsecs=0), self.clear_costmap)
         rospy.spin()
 
 

@@ -135,7 +135,12 @@ class Wrapper(object):
             p.header.frame_id = "camera"
             p.pose.position.x = x
             p.pose.position.y = y
-            p.pose.position.z = -0.415
+
+            if "Mall" in name:
+                p.pose.position.z = -0.4
+            else:
+                p.pose.position.z = -0.415
+
             #Special angle changes
             z = -z + (math.pi/2 * (abs(z)/z))
             p.pose.orientation.z = tf.transformations.quaternion_from_euler(0, 0, z)[2]

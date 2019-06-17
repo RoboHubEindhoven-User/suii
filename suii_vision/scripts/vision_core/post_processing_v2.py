@@ -20,8 +20,8 @@ class PostProcessing:
         l_square = 40 #mm
         w_square = 40 #mm
         # Calcutaing mm/pixel ratio from measurements from 40 cm hight:
-        self.l_per_pix = l_square/58.0 # In mm per pix
-        self.w_per_pix = w_square/58.0  # In mm per pix
+        self.l_per_pix = l_square/56.0 # In mm per pix
+        self.w_per_pix = w_square/56.0  # In mm per pix
         self.cx_biggest = None
         self.object_list = []
         self.debug = False
@@ -40,6 +40,8 @@ class PostProcessing:
             img {[numpy.ndarray]} -- [Input image]
             debug {[bool]} -- [If true than the code displays result image]
         """
+        self.left_upper = []
+        self.right_lower = []
         self.cx_biggest = None
         name_var = object_name
         self.debug = debug
@@ -59,6 +61,8 @@ class PostProcessing:
         list_vars = [name_var,tf_vals[0],tf_vals[1],tf_vals[2]]
         if self.debug:
             cv2.imshow('img_var',img)
+            cv2.waitKey(5000)
+            cv2.destroyAllWindows()
         if tf_vals[3] == True:
             self.object_list.append(list_vars)
             return True  
@@ -120,7 +124,7 @@ class PostProcessing:
             upper_val = 51
         elif obj_name in malle_list:
             area_val = 6
-            blur_val = 125
+            blur_val = 75
             lower_val = 33
             upper_val = 74
 
@@ -142,11 +146,11 @@ class PostProcessing:
             [numpy.ndarray] -- [Output matrix from canny edge detection]
         """        
         image = img
-        h,  w = image.shape[:2]
-        newcameramtx, roi=cv2.getOptimalNewCameraMatrix(self.mtx,self.dist,(w,h),1,(w,h))
-        dst = cv2.undistort(image, self.mtx, self.dist, None, newcameramtx)
-        x,y,w,h = roi
-        image = dst[y:y+h, x:x+w]
+        #h,  w = image.shape[:2]
+        #newcameramtx, roi=cv2.getOptimalNewCameraMatrix(self.mtx,self.dist,(w,h),1,(w,h))
+        #dst = cv2.undistort(image, self.mtx, self.dist, None, newcameramtx)
+        #x,y,w,h = roi
+        #image = dst[y:y+h, x:x+w]
         blurred = cv2.bilateralFilter(image ,area_val,blur_val,blur_val)
         gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, lower_val, upper_val)
@@ -187,7 +191,7 @@ class PostProcessing:
                 cx_temp = int(M["m10"] / M["m00"])
                 cy_temp = int(M["m01"] / M["m00"])
                 #check if center of contour is in ROI
-                if(cx_temp > (self.left_upper[0]-10) and cx_temp < (self.right_lower[0]+10.0)  and cy_temp > (self.left_upper[1]-10) and cy_temp < (self.right_lower[1]+10)):
+                if(cx_temp > self.left_upper[0] and cx_temp < self.right_lower[0]  and cy_temp > self.left_upper[1] and cy_temp < self.right_lower[1]):
                     #biggest rectangle around object for orientation 
                     rect = cv2.minAreaRect(c)
                     dimen = rect[1]
