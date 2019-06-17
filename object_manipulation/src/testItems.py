@@ -10,7 +10,6 @@ from suii_msgs.srv import Item, ItemResponse, ItemRequest
 from suii_msgs.msg import VisionScanObject
 
 
-
 tolerance = 10 * 0.01 # 10cm
 
 class ItemObject:
@@ -19,190 +18,87 @@ class ItemObject:
         self.link = link
         self.presision = presision
 
+class itemTest:
+    def __init__(self):
+        rospy.init_node('testItems', anonymous=True)
+        rospy.wait_for_service('items/updateItems')
+        rospy.wait_for_service('items/clearItems')
+        rospy.wait_for_service('items/moveItem')
+        rospy.wait_for_service('items/getItem')
+        rospy.wait_for_service('items/getHole')
+        rospy.wait_for_service('items/removeItem')
+        rospy.wait_for_service('items/printLists')
 
-def test():
-
-    #     rospy.wait_for_service('add_two_ints')
-    # try:
-    #     add_two_ints = rospy.ServiceProxy('add_two_ints', AddTwoInts)
-    #     resp1 = add_two_ints(x, y)
-    #     return resp1.sum
-    # except rospy.ServiceException, e:
-    #     print "Service call failed: %s"%e
-
-    rospy.init_node('testItems', anonymous=True)
-
-    rospy.wait_for_service('items/updateItems')
-    rospy.wait_for_service('items/clearItems')
-    rospy.wait_for_service('items/moveItem')
-    rospy.wait_for_service('items/getItem')
-    rospy.wait_for_service('items/getHole')
-    rospy.wait_for_service('items/removeItem')
-    rospy.wait_for_service('items/printLists')
-
-    updateItems = rospy.ServiceProxy('items/updateItems', UpdateItems)
-    clearItems = rospy.ServiceProxy('items/clearItems', Empty)
-    removeItem = rospy.ServiceProxy('items/removeItem',Item)
-    moveItem = rospy.ServiceProxy('items/moveItem', Item)
-    getItem = rospy.ServiceProxy('items/getItem',Item)
-    getHole = rospy.ServiceProxy('items/getHole',Item)
-    printLists = rospy.ServiceProxy('items/printLists',Empty)
-
-
-    updateItemsRequest = UpdateItemsRequest()
-
-    item = VisionScanObject()
-    item.id = 1
-    item.link = "link1"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 2
-    item.link = "link2"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 3
-    item.link = "link3"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 101
-    item.link = "link4"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 102
-    item.link = "link5"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 103
-    item.link = "link6"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    item = VisionScanObject()
-    item.id = 104
-    item.link = "link7"
-    item.sure = 0
-    updateItemsRequest.items.append(item)
-
-    #add items
-    try:
-        updateItems(updateItemsRequest)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-    #print
-    try:
-        printLists()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+        self.updateItemsClient = rospy.ServiceProxy('items/updateItems', UpdateItems)
+        self.clearItemsClient = rospy.ServiceProxy('items/clearItems', Empty)
+        self.removeItemClient = rospy.ServiceProxy('items/removeItem',Item)
+        self.moveItemClient = rospy.ServiceProxy('items/moveItem', Item)
+        self.getItemClient = rospy.ServiceProxy('items/getItem',Item)
+        self.getHoleClient = rospy.ServiceProxy('items/getHole',Item)
+        self.printListsClient = rospy.ServiceProxy('items/printLists',Empty)
     
-    #move to robot
-    request = ItemRequest()
-    request.itemID = 2
-    request.onRobot = False
-    try:
-        moveItem(request)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
 
-    #print
-    try:
-        printLists()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-    #get object 1 from table
-    request = ItemRequest()
-    request.itemID = 1
-    request.onRobot = False
-    try:
-        itemResponse = getItem(request)
-        print("##get object 1 from table")
-        print(itemResponse)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    def printList(self):
+        #print
+        try:
+            self.printLists()
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
         
-    #remove object 1 from table
-    request = ItemRequest()
-    request.itemID = 1
-    request.onRobot = False
-    try:
-        removeItem(request)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    def updateList(self):
+        updateItemsRequest = UpdateItemsRequest()
+        updateItemsRequest.items.append(VisionScanObject(1,"link1",0))
+        updateItemsRequest.items.append(VisionScanObject(2,"link2",0))
+        updateItemsRequest.items.append(VisionScanObject(3,"link3",0))
+        updateItemsRequest.items.append(VisionScanObject(4,"link4",0))
+        updateItemsRequest.items.append(VisionScanObject(5,"link5",0))
+        updateItemsRequest.items.append(VisionScanObject(101,"link6",0))
+        updateItemsRequest.items.append(VisionScanObject(103,"link7",0))
+        updateItemsRequest.items.append(VisionScanObject(104,"link8",0))
+        #add items
+        try:
+            self.updateItemsClient(updateItemsRequest)
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
 
-    #print
-    try:
-        printLists()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-        
-    #get object 2 from robot
-    request = ItemRequest()
-    request.itemID = 2
-    request.onRobot = True
-    try:
-        itemResponse = getItem(request)
-        print("##get object 2 from robot")
-        print(itemResponse)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-    #remove object 2 from robot
-    request = ItemRequest()
-    request.itemID = 2
-    request.onRobot = True
-    try:
-        removeItem(request)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-    #print
-    try:
-        printLists()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
-
-    #get hole
-    request = ItemRequest()
-    request.itemID = 2
-    try:
-        itemResponse = getHole(request)
-        print("##get hole")
-        print(itemResponse)
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    def removeItem(self, id,onRobot):
+        try:
+            self.removeItemClient(ItemRequest(id,onRobot))
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
     
-    #clear list
-    try:
-        clearItems()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    def moveItem(self, id, onRobot):
+        try:
+            self.moveItemClient(ItemRequest(id,onRobot))
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
+
+    def getItem(self, id, onRobot):
+        try:
+            itemResponse =  self.getItemClient(ItemRequest(id,onRobot))
+            print("##get object 1 from table")
+            print(itemResponse)
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
     
-    #print
-    try:
-        printLists()
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
+    def getHole(self,id):
+        try:
+            itemResponse = self.getHoleClient(ItemRequest(id,False))
+            print("##get object 1 from table")
+            print(itemResponse)
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
 
-
-    listener = tf.TransformListener()
-
-    rate = rospy.Rate(10) # 10hz
+    def clearList(self):
+        try:
+            self.clearItemsClient()
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
+ 
+    def test(self):
+        self.updateList()
+        self.moveItem(1,True)
 
 if __name__ == '__main__':
-    
-    try:
-        test()
-    except rospy.ROSInterruptException:
-        pass
+    test = itemTest()
+    test.test() 

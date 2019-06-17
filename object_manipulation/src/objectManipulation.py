@@ -9,6 +9,7 @@ from suii_msgs.srv import ItemPlace, ItemPlaceResponse
 from suii_msgs.srv import ItemFindhole, ItemFindholeResponse
 from suii_msgs.srv import ItemDrive, ItemDriveResponse
 
+from std_msgs.msg import Float32
 #vision
 from suii_msgs.srv import VisionScan, VisionScanRequest, VisionScanResponse
 #ur3
@@ -37,10 +38,20 @@ class objectManipulation:
         self.item_moveItem = rospy.ServiceProxy('items/moveItem', ItemMove)
         self.item_getItem = rospy.ServiceProxy('items/getItem',Item)
         self.item_getHole = rospy.ServiceProxy('items/getHole',Item)
+
+        rospy.Subscriber("/table_height", Float32, self.height_callback)
+
+        self.TFbroadcaster = tf.TransformBroadcaster()
+
+        self.dropIndex = 0
+        self.tableHeight = 15.0
         
         
+    def height_callback(self,data):
+        self.tableHeight = data.data
 
     def drive(self): # make robot ready to drive
+        self.dropIndex = 0
         try:
             self.item_clearItems() # clear table list
             self.UR3_look(ManipulationPoseRequest(0)) #set arm in drive position
@@ -73,7 +84,17 @@ class objectManipulation:
         
 
     def placeOnTable(self):
-        self.place("table")
+        
+        x = -0.1 + (0.1*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
+        y = -0.5 # 0.5 meter in front of robot (base_link)
+        z = (self.tableHeight*0.01) + 0.04 # table height + 4 cm 
+
+        pose = [[x,y,z],[0,0,0,1]]
+        
+        name = "table_{0}".format(self.dropIndex)
+        self.addTF(pose,name)
+        self.place(name)
+        self.dropIndex +=1
         return True
 
     def placeOnHole(self,id):
@@ -107,10 +128,11 @@ class objectManipulation:
         if onRobot: #if the item is`t found but it should be on the robot there is no point in looking for it on the table. return False
             return False
 
-        #look for item on table    
+        #look for item on table
+        scanHeight = int(self.tableHeight/5) #0cm->0, 5cm->1, 10cm->2, 15cm ->3
         i = 0
         while True:
-            self.scan(i,1)
+            self.scan(i,scanHeight)
             item = self.getItem(itemID,onRobot)
             if item: #if item is found
                 return item
@@ -132,10 +154,27 @@ class objectManipulation:
         return False
 
     def scan(self, position, height ): # position: 1 mid, 2 left, 3 right;  
+        if position < 0 or position > 2:
+            position = 0#if pose is not mid(0), left(1), right(2) set to mid(0)
+        if height < 0 or height > 3:
+            height = 3# if heitght is wrong set to max height (3->15cm)
         moveID = 1 + position + (height*3)
         self.UR3_look(ManipulationPoseRequest(moveID)) #move to scan pose.
         visionResponse = self.vision_scan()#let vision look for items.
         self.item_updateItems(UpdateItemsRequest(visionResponse.result)) #update the list with known Items
+
+    def addTF(self, pose , name):
+        try:
+            self.TFbroadcaster.sendTransform(
+                translation=pose[0],
+                rotation=pose[1],
+                time=rospy.Time.now(),
+                child=name,
+                parent="base_link"
+            )
+            return True
+        except tf.Exception:
+            return False
 
 
     
