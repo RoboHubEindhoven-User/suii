@@ -178,10 +178,12 @@ class myNode:
         response = ItemResponse(True,0,"")
         id = req.itemID
         if id == 2:
+            print("find hole 1 instead of 2")
             id = 1
         if id == 4:
+            print("find hole 3 instead of 4")
             id = 3
-        item = ItemObject(req.itemID,"",0)
+        item = ItemObject(id,"",0)
 
         listIndex = self.findInList(item,self.HoleList,False)
         if listIndex == -1:
