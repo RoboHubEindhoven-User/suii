@@ -20,10 +20,10 @@
     pkg="robot_state_publisher"
     type="state_publisher" />
 
-  <node pkg="tf" type="static_transform_publisher" name="holder3_tf" args="-0.127842650743 0.234585789156 0.0960479728681 0.00380621322301 -0.00974245772883 0.881993985138 0.471144571696 ur3/base HOLDER_3 10" />
-  <node pkg="tf" type="static_transform_publisher" name="holder2_tf" args="0.00169708883326 0.266731643535 0.097453168091 -0.00234243186881 0.013534331762 0.707116331128 0.706963810339 ur3/base HOLDER_2 10" />
-  <node pkg="tf" type="static_transform_publisher" name="holder1_tf" args="0.124876151338 0.222027326644 0.0966677278935 -0.0045757046931 0.0170587218851 0.87691174537 -0.480326819746 ur3/base HOLDER_1 10" />
-  <node pkg="tf" type="static_transform_publisher" name="dropoff_tf" args="-7.66910640242e-08 -0.500000015405 -0.130783343961 -0.0135061540913 0.00250002438825 0.908417382448 -0.417838716427 ur3/base table 10" />
+  <node pkg="tf" type="static_transform_publisher" name="holder3_tf" args="-0.116716759233 0.243108042094 0.096870664897 -0.0100379475095 -0.0322415944327 0.87315427703 0.48627289427 ur3/base HOLDER_3 10" />
+  <node pkg="tf" type="static_transform_publisher" name="holder2_tf" args="0.0160084875755 0.274635895309 0.0989370326304 -0.000509355482784 -0.0165917142892 0.718774323159 0.695045270426 ur3/base HOLDER_2 10" />
+  <node pkg="tf" type="static_transform_publisher" name="holder1_tf" args="0.142679287389 0.228439321043 0.0976393529311 0.0109925950849 0.00225113955147 0.488734252187 0.872360548147 ur3/base HOLDER_1 10" />
+ <!-- <node pkg="tf" type="static_transform_publisher" name="dropoff_tf" args="-7.66910640242e-08 -0.500000015405 -0.130783343961 -0.0135061540913 0.00250002438825 0.908417382448 -0.417838716427 ur3/base table 10" />-->
 
   <!-- <node
     name="rviz"
