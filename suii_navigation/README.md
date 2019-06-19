@@ -11,7 +11,7 @@ This is the repository for the Navigation solution for Suii. In the repository y
 This package requires the following packages to be installed:
 
 * `laser_filters`
-* `teb`
+* `teb_local_planner`
 * `costmap_converter`
 * `global_planner`
 * `local_planner`
