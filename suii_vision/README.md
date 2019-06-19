@@ -4,7 +4,18 @@ This is a repository contains the vision solution for object detection for the R
 
 ![](https://github.com/RoboHubEindhoven/suii/blob/master/suii_vision/scripts/images/WhatsApp%20Image%202019-06-07%20at%2011.28.57%20AM.jpeg) 
 
-We will devide this solution in to the two systems, YOLO Object detection and image processing. In this README we will also split up these parts.
+We will devide this solution in to the two systems, YOLO Object detection and image processing. In this README we will also split up these parts. To learn more about our vision solution, you can read the links to the wiki's below. In this README there is a short summary of the results and a quickstart guide. In the wiki links you can read the full how-to-guides and more in depth information.
+
+**YOLO:**
+* [How does the custom YOLO python object detection work?](https://github.com/RoboHubEindhoven/suii/wiki/How-does-the-custom-YOLO-python-object-detection-work%3F/_edit)
+* [How to train YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/How-to-train-YOLO-object-detection)
+* [How to use YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/How-to-use-YOLO-object-detection)
+* [YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection)
+
+**Image processing:**
+* [Image_processing explained](https://github.com/RoboHubEindhoven/suii/wiki/Image_processing-explained)
+* [Camera_calibration explained](https://github.com/RoboHubEindhoven/suii/wiki/Camera_calibration-explained)
+* [Camera_accuracy_test results](https://github.com/RoboHubEindhoven/suii/wiki/Camera_accuracy_test-results)
 
 # YOLO Object detection 
 
