@@ -135,11 +135,21 @@ catkin_make
 
 For testing the BlasterX Sens3D run the [realsense_test.py](https://github.com/RoboHubEindhoven/suii/tree/master/suii_vision/scripts/camera_calibration) and check if the camera feed opens.
 
-To test the main codes for image processing you need to run the following lines:
-'''
+In the code post_processing_v2.py you need to change the loaded data in the __init__ to your own used path. currently it is:
+```
+data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/mtx.npz')
+self.mtx = data['mtx']
+data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/dist.npz')
+self.dist = data['dist'] 
+run the following lines:
+```
+
+After chaning the lines of code to the correct path, you can run the code using the following commands:
+
+```
 cd /home/jeroen/catkin_ws/src/suii/suii_vision/scripts/vision_core
 python2 post_processing_test.py 
-'''
+```
 You should recieve some output like:
 ```
 area 6 blur 126 lower 75 upper 251
@@ -150,13 +160,6 @@ True
 True
 ```
 
-**note**: In the code post_processing_v2.py you need to change the loaded data in the __init__ to your own used path. currently it is:
-```
-data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/mtx.npz')
-self.mtx = data['mtx']
-data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/dist.npz')
-self.dist = data['dist'] 
-```
 **note**: If you want to show the processed image, edit the post_processing_test.py file. 
 **change** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,False)* **to** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,True)*
 
