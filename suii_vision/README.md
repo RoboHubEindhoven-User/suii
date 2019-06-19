@@ -141,7 +141,6 @@ data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/mtx
 self.mtx = data['mtx']
 data = np.load('/home/suii/catkin_ws/src/image_processing/camera_calibration/dist.npz')
 self.dist = data['dist'] 
-run the following lines:
 ```
 
 After chaning the lines of code to the correct path, you can run the code using the following commands:
