@@ -1,6 +1,7 @@
 # Suii_vision
 
 This is a repository contains the vision solution for object detection for the Robocup@work competition that RoboHubEindhoven participates in. The vision works as followed. First the system will be determine a region of interest (ROI) around an object. This is a square drawn around the object. The ROI will be classified with a trained name. This is all done by using YOLO. The Second step is to determine the orientation and rotation. Image processing will take care of that! As a result you will get something like the following picture: 
+
 ![](https://github.com/RoboHubEindhoven/suii/blob/master/suii_vision/scripts/images/WhatsApp%20Image%202019-06-07%20at%2011.28.57%20AM.jpeg) 
 
 We will devide this solution in to the two systems, YOLO Object detection and image processing. In this README we will also split up these parts.
@@ -159,14 +160,10 @@ True
 True
 ```
 
-**note**: If you want to show the processed image, edit the post_processing_test.py file. 
-
-**change** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,False)* **to** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,True)*
+**note**: If you want to show the processed image, edit the post_processing_test.py file. **change** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,False)* **to** *build_center = self.test.build_center("Bolt",(0,0,640,480),frame,True)*
 
 
 ## Authors
 
-**Jeroen Bongers** - *in name of RoboHub Eindhoven* - [RoboHub Eindhoven website](https://robohub-eindhoven.nl/)
-
-**Mike van Lieshout** - *in name of RoboHub Eindhoven* - [RoboHub Eindhoven website](https://www.robohub-eindhoven.nl)
+**Jeroen Bongers and Mike van Lieshout** - *in name of RoboHub Eindhoven* - [RoboHub Eindhoven website](https://robohub-eindhoven.nl/)
 
