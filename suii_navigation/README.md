@@ -25,6 +25,12 @@ sudo apt-get install ros-kinetic-<package_name>
 Do take care to replace the underscores in the pakcage names with the normal '-' sign.
 
 
+Before running navigation the make sure the latest version of the suii package is cloned on the robot using the following command:
+```
+git clone https://github.com/RoboHubEindhoven/suii.git 
+```
+
+
 ## Usage
 
 #### Motor calibration
