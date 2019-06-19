@@ -5,7 +5,7 @@ This is a repository contains the vision solution for object detection for the R
 
 We will devide this solution in to the two systems, YOLO Object detection and image processing. In this README we will also split up these parts.
 
-## YOLO Object detection 
+# YOLO Object detection 
 
 This repository consists of the [ultralytics python yolov3](https://github.com/ultralytics/yolov3) with some custom adjustments. If you want to learn more of how the YOLO object detection works and for how to use guides, please check out our [vision wiki](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection). At the end of the page where you land on you can find the links to all the guides you need to use the YOLO object detection.
 
@@ -15,11 +15,11 @@ This repository consists of the [ultralytics python yolov3](https://github.com/u
 
 ![index](https://user-images.githubusercontent.com/39261806/58866982-ede83280-86b9-11e9-80dd-680a19e43adf.jpeg)
 
-### Getting started
+## Getting started
 
 For this project ubuntu 16.04 LTS is used with [nVidia CUDA toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (For this you need an nVidia graphics card in the desktop we have, an gtx 1080 TI is used)
 
-### Prerequisites
+## Prerequisites
 
 This package runs on python3.7 or later with the following packages:
 
@@ -42,7 +42,7 @@ For cloning [ultralytics python yolov3](https://github.com/ultralytics/yolov3) u
 git clone https://github.com/ultralytics/yolov3.git
 ```
 
-### Usage
+## Usage
 
 ### Execute
 
@@ -91,17 +91,18 @@ Below are the links to the pretrained weights:
 * Darknet `*.weights` format: https://pjreddie.com/media/files/yolov3.weights
 * PyTorch `*.pt` format: https://drive.google.com/drive/folders/1uxgUBemJVw9wZsdpboYbzUN4bcRhsuAI
 
-## IMAGE_PROCESSING
+
+# IMAGE_PROCESSING
 
 This part of the repository contains multiple python scripts to process images and calibrate a camera.The processed image returns the x, y and theta of the center point of an object. This centerpoint is measured from the centerpoint of the camera. The x, y and theta will be used to create a TF, so a robotic arm can pick and place the object.
 
 If you want to learn more of how the vision systems work, please check out our [wiki](https://github.com/RoboHubEindhoven/suii/wiki).
 
-### Getting Started
+## Getting Started
 
 This package only contains python2 scripts and make use of OpenCV-3.3.1-dev and numpy 1.11.0. Furthermore we used the BlasterX Senz3D camera. For this we need to have the librealsense2 drivers installed.
 
-### Prerequisites
+## Prerequisites
 
 Assuming python2 or python3 and numpy are already installed, you only need to install OpenCV. If using python3, replace the "python2" to "python3". You can install OpenCV by running the following lines:
 
@@ -121,7 +122,7 @@ sudo apt install librealsense2-dkms librealsense2-utils librealsense2-dev
 pip3 install pyrealsense2
 ```
 
-### Installing
+## Installing
 
 To install the image_processing package in your catkin workspace, you will need to run the following lines:
 ```
