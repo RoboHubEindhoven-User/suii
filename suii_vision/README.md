@@ -7,7 +7,7 @@ This is a repository contains the vision solution for object detection for the R
 We will devide this solution in to the two systems, YOLO Object detection and image processing. In this README we will also split up these parts. To learn more about our vision solution, you can read the links to the wiki's below. In this README there is a short summary of the results and a quickstart guide. In the wiki links you can read the full how-to-guides and more in depth information.
 
 **YOLO:**
-* [How does the custom YOLO python object detection work?](https://github.com/RoboHubEindhoven/suii/wiki/How-does-the-custom-YOLO-python-object-detection-work%3F/_edit)
+* [How does the custom YOLO python object detection work?](https://github.com/RoboHubEindhoven/suii/wiki/How-does-the-custom-YOLO-python-object-detection-work%3F)
 * [How to train YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/How-to-train-YOLO-object-detection)
 * [How to use YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/How-to-use-YOLO-object-detection)
 * [YOLO object detection](https://github.com/RoboHubEindhoven/suii/wiki/YOLO-Object-detection)
