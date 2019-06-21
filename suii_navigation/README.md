@@ -1,6 +1,6 @@
 # Navigation
 
-Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config)
+Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config). A navigation manager was made to interface between move_base and the rest of the system, discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Manager-Node). 
 
 ## Getting Started
 
