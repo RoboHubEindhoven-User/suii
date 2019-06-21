@@ -1,6 +1,6 @@
 # Navigation
 
-Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config). A navigation manager was made to interface between move_base and the rest of the system, discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Manager-Node). A utilitarian node for calculating distance between the robot's position and a goal was made to aid the mission planning software. This node can be found [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Euclidean-Calculator-Node).
+Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config). A navigation manager was made to interface between move_base and the rest of the system, discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Manager-Node). A utilitarian node for calculating distance between the robot's position and a goal was made to aid the mission planning software. This node is discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Euclidean-Calculator-Node).
 
 ## Important to know
 
