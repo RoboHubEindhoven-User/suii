@@ -29,8 +29,8 @@ y_mid = 240 # in pixels
 l_pix = 0
 w_pix = 0 
 #ROI
-left_upper = (0,0) #x,y
-right_lower = (640,480) #x,y
+left_upper = (100,100) #x,y
+right_lower = (200,200) #x,y
 #setting up camera stream
 pipeline = rs.pipeline()
 config = rs.config()

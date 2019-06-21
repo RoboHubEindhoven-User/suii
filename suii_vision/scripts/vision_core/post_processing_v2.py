@@ -96,11 +96,11 @@ class PostProcessing:
         Returns:
             [int] -- [Returns four integers for changing filter settings]
         """        
-        black_list = ["F20_20_B","S40_40_B","M20_100","R20","Bearing","Motor","Bearing","F20_20_Mall","F20_20_Mall","R20_Mall","Bolt_Mall","M20_Mall","M30_Mall","Red_Container_Top","Red_Container_Front","Blue_Container_Top","Blue_Container_Front"]
+        black_list = ["F20_20_B","S40_40_B","M20_100","R20","Bearing","Motor","Bearing"]
         alu_list = ["F20_20_G","S40_40_G"]
         nut_list = ["M20", "M30"]
         shiny_list = ["Bearing_Box","Axis","Distance_Tube"] 
-        malle_list = ["F20_20_Mall","F40_40_Mall","R20_Mall","Bolt_Mall","M20_Mall","M30_Mall"]
+        malle_list = ["F20_20_Mall","F40_40_Mall","R20_Mall","Bolt_Mall","M20_Mall","M30_Mall","Red_Container_Top","Red_Container_Front","Blue_Container_Top","Blue_Container_Front"]
 
         if obj_name in black_list:
             area_val = 6
