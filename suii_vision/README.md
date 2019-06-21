@@ -45,8 +45,7 @@ This package runs on python3.7 or later with the following packages:
 First you have to make directories and with one command you can install the required packages.
 
 ```bash
-mkdir workspace
-cd workspace
+cd catkin_ws/src
 git clone https://github.com/RoboHubEindhoven/suii.git
 cd suii_vision/scripts/yolo
 pip3 install -U -r requirements.txt
