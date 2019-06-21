@@ -1,0 +1,6 @@
+classes= 23
+train  = /home/ros/workspace/datasets/yolo_with_filter/config/train.list 
+valid  = /home/ros/workspace/datasets/yolo_with_filter/config/valid.list 
+labels = /home/ros/workspace/datasets/yolo_with_filter/config/full_yolo.names
+names = /home/ros/workspace/datasets/yolo_with_filter/config/full_yolo.names
+backup = /home/ros/workspace/datasets/yolo_with_filter/weights
