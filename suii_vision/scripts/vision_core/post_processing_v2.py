@@ -146,11 +146,11 @@ class PostProcessing:
             [numpy.ndarray] -- [Output matrix from canny edge detection]
         """        
         image = img
-        #h,  w = image.shape[:2]
-        #newcameramtx, roi=cv2.getOptimalNewCameraMatrix(self.mtx,self.dist,(w,h),1,(w,h))
-        #dst = cv2.undistort(image, self.mtx, self.dist, None, newcameramtx)
-        #x,y,w,h = roi
-        #image = dst[y:y+h, x:x+w]
+        h,  w = image.shape[:2]
+        newcameramtx, roi=cv2.getOptimalNewCameraMatrix(self.mtx,self.dist,(w,h),1,(w,h))
+        dst = cv2.undistort(image, self.mtx, self.dist, None, newcameramtx)
+        x,y,w,h = roi
+        image = dst[y:y+h, x:x+w]
         blurred = cv2.bilateralFilter(image ,area_val,blur_val,blur_val)
         gray = cv2.cvtColor(blurred, cv2.COLOR_BGR2GRAY)
         edges = cv2.Canny(gray, lower_val, upper_val)
