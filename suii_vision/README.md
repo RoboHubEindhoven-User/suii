@@ -29,7 +29,7 @@ This repository consists of the [ultralytics python yolov3](https://github.com/u
 
 ## Getting started
 
-For this project ubuntu 16.04 LTS is used with [nVidia CUDA toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (For this you need an nVidia graphics card in the desktop we have, an gtx 1080 TI is used)
+For this project ubuntu 16.04 LTS is used with [nVidia CUDA toolkit 10.1](https://developer.nvidia.com/cuda-downloads) (For this you need an nVidia graphics card in the desktop we have, an gtx 1080 TI is used) You will need to install the CUDA toolkit for the YOLO object detection to work. But be carefull with installing the toolkit because if you do not install it properly you cant acces the pc anymore.
 
 ## Prerequisites
 
