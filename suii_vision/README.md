@@ -42,9 +42,13 @@ This package runs on python3.7 or later with the following packages:
 * `matplotlib`
 * `pycocotools`
 
-To install the packages all in once run the following command in the `yolov3_custom` folder:
+First you have to make directories and with one command you can install the required packages.
 
 ```bash
+mkdir workspace
+cd workspace
+git clone https://github.com/RoboHubEindhoven/suii.git
+cd suii_vision/scripts/yolo
 pip3 install -U -r requirements.txt
 ```
 
