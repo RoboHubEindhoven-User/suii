@@ -3,7 +3,7 @@
 # Created by Jeroen Bongers in name of RoboHub Eindhoven
 #
 
-from post_processing_v2 import PostProcessing
+from post_processing_v3 import PostProcessing
 import cv2
 import pyrealsense2 as rs
 import numpy as np
@@ -26,7 +26,7 @@ class PostProcessingTest:
             frames = pipeline.wait_for_frames()
             color_frame = frames.get_color_frame()
             color_image = np.asanyarray(color_frame.get_data())       
-            build_center = self.test.build_center("Bolt",(0,0,640,480),color_image,False)
+            build_center = self.test.build_center("Bolt",(0,0,640,480),color_image,True)
             build_view = self.test.build_view()
             reset_view = self.test.reset_view()
             print(build_center)
