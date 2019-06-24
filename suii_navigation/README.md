@@ -1,6 +1,11 @@
 # Navigation
 
-Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config). A navigation manager was made to interface between move_base and the rest of the system, discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Manager-Node). 
+Navigation is responsible for everything that has to do with autonomous driving of the robot. The teb_local_planner was used. This planner makes use of several configuration files to operate discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Config). A navigation manager was made to interface between move_base and the rest of the system, discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Manager-Node). A utilitarian node for calculating distance between the robot's position and a goal was made to aid the mission planning software. This node is discussed [here](https://github.com/RoboHubEindhoven/suii/wiki/Navigation-Euclidean-Calculator-Node).
+
+## Important to know
+
+Navigation is now tweaked to the following specs:
+The smallest gap between two objects the robot can fit through is 62cm. If the gap is any smaller the robot wil refuse to drive through and replan to find another path if able. This is the minimum possible distance navigation wil reliably fit through without risking collision during normal travel. Also the robot needs 25cm to come to a complete stop after traveling at maximum velocity.
 
 ## Getting Started
 
