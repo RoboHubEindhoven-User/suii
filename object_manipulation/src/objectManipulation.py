@@ -51,7 +51,8 @@ class objectManipulation:
         self.tableHeight = data.data
 
     def drive(self): # make robot ready to drive
-        self.dropIndex = 0
+        if self.dropIndex > 5:
+            self.dropIndex = 0
         try:
             self.item_clearItems() # clear table list
             self.UR3_look(ManipulationPoseRequest(0)) #set arm in drive position
@@ -87,8 +88,8 @@ class objectManipulation:
         
         dropDistance = 0.15
 
-        x = 0.7 # 0.5 meter in front of robot (base_link)
-        y = -dropDistance + (dropDistance*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
+        x = 0.7 # 0.7 meter in front of robot (base_link)
+        y = -dropDistance*2 + (dropDistance*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
         z = (self.tableHeight*0.01) + 0.04 # table height + 4 cm 
 
         pose = [[x,y,z],[0,0,0,1]]
