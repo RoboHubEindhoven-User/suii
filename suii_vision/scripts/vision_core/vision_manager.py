@@ -7,7 +7,7 @@ import cv2
 import pyrealsense2 as rs
 import numpy
 
-from post_processing_v2 import PostProcessing
+from post_processing_v3 import PostProcessing
 from yolo import Yolo
 
 class VisionManager(object):
