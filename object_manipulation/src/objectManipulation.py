@@ -112,6 +112,13 @@ class objectManipulation:
         self.place(hole)
         return True
 
+    def placeInBasket(self,id,placeId):
+        basket = self.findItem(placeId,False)
+        if basket is False:
+            return self.placeOnTable()
+        self.place(basket)
+        return True
+
     def findHole(self,itemID): # Find hole Behavior (curently mostly the same as findItem)
         item = self.getHole(itemID)
         if item:
@@ -235,6 +242,8 @@ class myNode:
     def handle_place(self,req):
         print("place called {}".format(req))
         response = ItemPlaceResponse(sucess = False)
+        if req.placePosition:
+            response.sucess = self.robot.placeInBasket(req.itemID,req.placePosition)
         if req.onRobot:
             response.sucess = self.robot.placeOnRobot(req.itemID)
         else:
@@ -246,7 +255,12 @@ class myNode:
 
     def handle_findhole(self,req):  
         print("findhole called")
-        hole = self.robot.findHole(req.itemID)
+        hole = False
+        if req.itemID > 100:
+            hole = self.robot.findHole(req.itemID)
+        else:
+            hole = self.robot.findItem(req.itemID,False)
+            
         if hole is False:
             return ItemFindholeResponse(sucess = False)
         return ItemFindholeResponse(sucess = True)
