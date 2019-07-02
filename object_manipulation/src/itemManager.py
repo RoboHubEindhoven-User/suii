@@ -218,6 +218,7 @@ class myNode:
         response = getFreeSpotResponse(False,0)
         spot = self.getFreeSpot()
         if spot is False:
+            rospy.logerr("no free spot")
             return response
         response.spot = spot
         response.sucess = True
@@ -271,7 +272,7 @@ class myNode:
         rospy.init_node('itemManager', anonymous=True)
         self.TFlistener = tf.TransformListener()
         self.TFbroadcaster = tf.TransformBroadcaster()
-
+	rospy.loginfo("itemManager Ready")
         rate = rospy.Rate(10) # 10hz
         while not rospy.is_shutdown():
             rate.sleep()

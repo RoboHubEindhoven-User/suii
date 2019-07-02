@@ -1,0 +1,4 @@
+<launch>
+	<node pkg="object_manipulation" type="objectManipulation.py" name="object_manipulation"/>
+	<node pkg="object_manipulation" type="itemManager.py" name="item_manager"/>
+</launch>

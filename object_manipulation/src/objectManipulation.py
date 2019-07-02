@@ -10,6 +10,7 @@ from suii_msgs.srv import ItemFindhole, ItemFindholeResponse
 from suii_msgs.srv import ItemDrive, ItemDriveResponse
 
 from std_msgs.msg import Float32
+from geometry_msgs.msg import Vector3
 #vision
 from suii_msgs.srv import VisionScan, VisionScanRequest, VisionScanResponse
 #ur3
@@ -21,6 +22,7 @@ from suii_msgs.srv import UpdateItems, UpdateItemsResponse, UpdateItemsRequest
 from suii_msgs.srv import Item, ItemResponse, ItemRequest
 from suii_msgs.srv import ItemMove, ItemMoveResponse, ItemMoveRequest
 from suii_msgs.srv import getFreeSpot, getFreeSpotResponse, getFreeSpotRequest
+from suii_msgs.srv import NavigationGoal, NavigationRepose, NavigationReposeRequest
 
 class objectManipulation:
     def __init__(self, *args):
@@ -38,13 +40,16 @@ class objectManipulation:
         self.item_moveItem = rospy.ServiceProxy('items/moveItem', ItemMove)
         self.item_getItem = rospy.ServiceProxy('items/getItem',Item)
         self.item_getHole = rospy.ServiceProxy('items/getHole',Item)
+        #drive
+        self.reposition = rospy.ServiceProxy('reposition',NavigationRepose) 
 
         rospy.Subscriber("/table_height", Float32, self.height_callback)
 
         self.TFbroadcaster = tf.TransformBroadcaster()
 
         self.dropIndex = 0
-        self.tableHeight = 15.0
+        self.tableHeight = 16.0 #cm
+        self.scanDriveDis = 0.025 # Meters
         
         
     def height_callback(self,data):
@@ -132,17 +137,44 @@ class objectManipulation:
             return False
 
         #look for item on table
-        scanHeight = int(self.tableHeight/5) #0cm->0, 5cm->1, 10cm->2, 15cm ->3
-        i = 0
+        scanHeight = self.heightToIndex(self.tableHeight)
+
+        scanpose = 0
         while True:
-            self.scan(i,scanHeight)
+
+            if scanHeight == 4:
+                if scanpose == 1:
+                    self.reposition(NavigationReposeRequest(Vector3(0,-self.scanDriveDis,0))) #drive relitive -1X
+                if scanpose == 2:
+                    self.reposition(NavigationReposeRequest(Vector3(0,2*self.scanDriveDis,0)))#drive relitive  2X
+                self.item_clearItems() # clear table list
+                self.scan(0,scanHeight)
+            else:
+                self.scan(scanpose,scanHeight)
+
             item = self.getItem(itemID,onRobot)
             if item: #if item is found
                 return item
-            i+=1
-            if i >= 3: # max 3 scans  
+            scanpose+=1
+            if scanpose >= 3: # max 3 scans  
                 break
         return False
+
+    def heightToIndex(self, height):
+        index = 3
+        if height == 0:
+            index = 0
+        elif height == 4:
+            index = 1
+        elif height == 9:
+            index = 2
+        elif height == 16:
+            index = 3
+        elif height == 23:
+            index = 4
+        else:
+            index = 3
+        return index
 
     def getItem(self,itemID, onRobot):
         response = self.item_getItem(ItemRequest(itemID,onRobot)) # id, onRobot
@@ -159,8 +191,8 @@ class objectManipulation:
     def scan(self, position, height ): # position: 1 mid, 2 left, 3 right;  
         if position < 0 or position > 2:
             position = 0#if pose is not mid(0), left(1), right(2) set to mid(0)
-        if height < 0 or height > 3:
-            height = 3# if heitght is wrong set to max height (3->15cm)
+        if height < 0 or height > 4:
+            height = 4# if heitght is wrong set to max height (3->15cm)
         moveID = 1 + position + (height*3)
         self.UR3_look(ManipulationPoseRequest(moveID)) #move to scan pose.
         visionResponse = self.vision_scan()#let vision look for items.
@@ -189,8 +221,8 @@ class myNode:
         s2 = rospy.Service('ItemPlace', ItemPlace, self.handle_place)
         s3 = rospy.Service('ItemFindhole', ItemFindhole, self.handle_findhole)
         s4 = rospy.Service('ItemDrive', ItemDrive, self.handle_drive)
-
         self.robot = objectManipulation()
+	rospy.loginfo("ObjectManipulation Ready")
 
     def handle_pick(self,req):   
         print("pick called {}".format(req))
