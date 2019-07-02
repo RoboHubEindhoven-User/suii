@@ -2,6 +2,7 @@
 uint16 itemID
 bool onRobot 
 bool inHole
+uint16 placePosition
 ---
 bool sucess
 uint8 error
