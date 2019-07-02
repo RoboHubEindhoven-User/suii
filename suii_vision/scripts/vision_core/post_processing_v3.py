@@ -105,7 +105,7 @@ class PostProcessing:
         alu_list = ["F20_20_G","S40_40_G"]
         nut_list = ["M20", "M30"]
         shiny_list = ["Bearing_Box","Axis","Distance_Tube"] 
-        basket_list = ["Blue_Container_Top","Blue_Container_Front"]
+        basket_list = ["Blue_Container_Top","Blue_Container_Front","Red_Container_Top","Red_Container_Front"]
         malle_list = ["F20_20_Mall","F40_40_Mall","R20_Mall","Bolt_Mall","M20_Mall","M30_Mall"]
         self.mal_or_object = "object"
         if obj_name in black_list:
