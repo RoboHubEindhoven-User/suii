@@ -136,6 +136,7 @@ Sudo apt-get update
 sudo apt install librealsense2-dkms librealsense2-utils librealsense2-dev
 pip3 install pyrealsense2
 ```
+If you get any error installing this, please check out the following [link](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md).
 
 ## Installing
 
