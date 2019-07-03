@@ -10,7 +10,7 @@ defaults_dict = {
     "data": "/home/ros/workspace/datasets/yolo_with_filter/config/full_yolo.data", # Data file path
     "weights": "/home/ros/workspace/datasets/yolo_with_filter/weights/full_yolo.backup", # Weights file path
     "conf_thres": 0.6, # Confidence threshold (accuracy)
-    "nms_thres": 0.2,  # Non-maximum supression threshold (compression, lower value = more compression)
+    "nms_thres": 0.5,  # Non-maximum supression threshold (compression, lower value = more compression)
     "size": 416 # DO NOT CHANGE!!!
 }
 
@@ -64,7 +64,7 @@ class Yolo(object):
                 # Add bbox to the image
                 label = '%s %.2f' % (self._classes[int(cls)], conf)
                 roi = (int(xyxy[0]), int(xyxy[1]), int(xyxy[2]), int(xyxy[3]))
-                rt.append((label, roi))
+                rt.append((self._classes[int(cls)], roi))
 
                 # Print results to screen
                 if debug:
