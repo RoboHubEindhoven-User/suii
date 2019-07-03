@@ -33,16 +33,18 @@ _ids = [
     "Axis",
     "Distance_Tube",
     "Motor",
+    "Red_Container_Top",
+    "Red_Container_Front",
+    "Blue_Container_Top",
+    "Blue_Container_Front"
+]
+_idsMall = [
     "F20_20_Mall",
     "F40_40_Mall",
     "R20_Mall",
     "Bolt_Mall",
     "M20_Mall",
-    "M30_Mall",
-    "Red_Container_Top",
-    "Red_Container_Front",
-    "Blue_Container_Top",
-    "Blue_Container_Front"
+    "M30_Mall"
 ]
 
 _tfpos = [[0.5, 0.2, 0],
@@ -78,7 +80,7 @@ _tfpos = [[0.5, 0.2, 0],
 class myNode:
     def __init__(self, *args):
         self.baseName = "base_link"
-        self.poses = ['drive','0cm_Mid','0cm_Left','0cm_Right','5cm_Mid','5cm_Left','5cm_Right','10cm_Mid','10cm_Left','10cm_Right','15cm_Mid','15cm_Left','15cm_Right']
+        self.poses = ['drive','0cm_Mid','0cm_Left','0cm_Right','4cm_Mid','4cm_Left','4cm_Right','9cm_Mid','9cm_Left','9cm_Right','16cm_Mid','16cm_Left','16cm_Right','23cm_Mid','23cm_Left','23cm_Right']
         rospy.init_node('mock_node', anonymous=True)
         self.TFbroadcaster = tf.TransformBroadcaster()
 
@@ -93,6 +95,7 @@ class myNode:
         rospy.Service('reposition', NavigationRepose, self.repose_handler)
 	rospy.Service('get_distance', DistanceToGoal, self.get_distance_handler)
 	rospy.loginfo("Mock Ready")
+	self.scanpose = 0
 
         rate = rospy.Rate(10) # 10hz
         while not rospy.is_shutdown():
@@ -107,7 +110,12 @@ class myNode:
         return ManipulationActionResponse(1)
     
     def handle_move(self, req):
-        print("[UR3] set arm to {}".format(self.poses[req.target]).rstrip("\n\r"))
+	if req.target == 0:
+		print("[UR3] set arm to {}".format(self.poses[req.target]))
+	else:
+		self.scanpose = (req.target-1)%3
+		print("[UR3] set arm to {} {}".format(self.poses[req.target],self.scanpose))
+		
         return ManipulationPoseResponse(True)
 
     def goal_handler(self, data):
@@ -129,32 +137,28 @@ class myNode:
     def handle_scan(self, req):
         print("[VISION] scan for item")
         visionScanResponse = VisionScanResponse()
-        visionScanResponse.result.append(VisionScanObject(1,_ids[1],1))
-        visionScanResponse.result.append(VisionScanObject(2,"link2",1))
-        visionScanResponse.result.append(VisionScanObject(3,"link3",1))
-        visionScanResponse.result.append(VisionScanObject(4,"link4",1))
-        visionScanResponse.result.append(VisionScanObject(5,"link5",1))
-      	visionScanResponse.result.append(VisionScanObject(6,"link6",1))
-        visionScanResponse.result.append(VisionScanObject(7,"link7",1))
-        visionScanResponse.result.append(VisionScanObject(8,"link8",1))
-      	visionScanResponse.result.append(VisionScanObject(9,"link9",1))
-        visionScanResponse.result.append(VisionScanObject(10,"link10",1))
-        visionScanResponse.result.append(VisionScanObject(11,"link11",1))
-	visionScanResponse.result.append(VisionScanObject(12,"link12",1))
-        visionScanResponse.result.append(VisionScanObject(13,"link13",1))
-        visionScanResponse.result.append(VisionScanObject(14,"basketBlue",1))
-        visionScanResponse.result.append(VisionScanObject(15,"basketRed",1))
-	visionScanResponse.result.append(VisionScanObject(101,"link101",1))
-        visionScanResponse.result.append(VisionScanObject(102,"link102",1))
-        visionScanResponse.result.append(VisionScanObject(103,"link103",1))
-	visionScanResponse.result.append(VisionScanObject(104,"link104",1))
-        visionScanResponse.result.append(VisionScanObject(105,"link105",1))
-        visionScanResponse.result.append(VisionScanObject(106,"link106",1))
+	
+	if self.scanpose == 0:
+		for x in range(0,5):
+			visionScanResponse.result.append(VisionScanObject(x+1,_ids[x],1))
+	if self.scanpose == 1:
+		for x in range(5,10):
+			visionScanResponse.result.append(VisionScanObject(x+1,_ids[x],1))
+	if self.scanpose == 2:
+		for x in range(10,len(_ids)):
+			visionScanResponse.result.append(VisionScanObject(x+1,_ids[x],1))
+
+	visionScanResponse.result.append(VisionScanObject(101,_idsMall[0],1))
+        visionScanResponse.result.append(VisionScanObject(103,_idsMall[1],1))
+        visionScanResponse.result.append(VisionScanObject(108,_idsMall[2],1))
+	visionScanResponse.result.append(VisionScanObject(105,_idsMall[3],1))
+        visionScanResponse.result.append(VisionScanObject(106,_idsMall[4],1))
+        visionScanResponse.result.append(VisionScanObject(107,_idsMall[5],1))
 	
 
         i = 0
         for x in visionScanResponse.result:
-           self.addTF([_tfpos[i],[0,0,0,1]],"link{}".format((i+1)%100))
+           self.addTF([_tfpos[i],[0,0,0,1]],x.link)
            i+=1 
 
         return visionScanResponse
