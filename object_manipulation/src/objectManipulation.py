@@ -244,7 +244,7 @@ class myNode:
         response = ItemPlaceResponse(sucess = False)
         if req.placePosition:
             response.sucess = self.robot.placeInBasket(req.itemID,req.placePosition)
-        if req.onRobot:
+        elif req.onRobot:
             response.sucess = self.robot.placeOnRobot(req.itemID)
         else:
             if req.inHole:
