@@ -33,10 +33,8 @@ _ids = [
     "Axis",
     "Distance_Tube",
     "Motor",
-    "Red_Container_Top",
-    "Red_Container_Front",
-    "Blue_Container_Top",
-    "Blue_Container_Front"
+    "Red_Container",
+    "Blue_Container"
 ]
 _idsMall = [
     "F20_20_Mall",

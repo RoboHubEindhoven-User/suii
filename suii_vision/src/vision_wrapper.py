@@ -37,9 +37,9 @@ _ids = {
     "M20_Mall": 106,
     "M30_Mall": 107,
     "Red_Container_Top": 14,
-    "Red_Container_Front": 14,
+    "Red_Container_Front": 16,
     "Blue_Container_Top": 15,
-    "Blue_Container_Front": 15
+    "Blue_Container_Front": 17
 }
 
 class VisionClient(object):
