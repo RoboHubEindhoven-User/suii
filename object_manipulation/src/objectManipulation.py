@@ -93,8 +93,8 @@ class objectManipulation:
         
         dropDistance = 0.15
 
-        x = 0.7 # 0.7 meter in front of robot (base_link)
-        y = -dropDistance*2 + (dropDistance*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
+        x = 0.55 + (dropDistance * (self.dropIndex/3)) # 0.7 meter in front of robot (base_link)
+        y = -dropDistance + (dropDistance*(self.dropIndex % 3)) # 10cm between new drop points.(offset resets when driving.)
         z = (self.tableHeight*0.01) + 0.04 # table height + 4 cm 
 
         pose = [[x,y,z],[0,0,0,1]]
