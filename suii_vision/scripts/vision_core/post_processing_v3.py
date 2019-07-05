@@ -298,7 +298,7 @@ class PostProcessing:
         x_orientation = x_mid_roi - x_mid  #in pixels (from line)
         y_orientation = y_mid - y_mid_roi #in pixels (from line)
         x_orientation = (x_orientation*self.l_per_pix)/1000 #calculate pixel to meter and invert
-        y_orientation = ((y_orientation*self.w_per_pix)/1000)+0.02) #calculate pixel to meter and invert   
+        y_orientation = (y_orientation*self.w_per_pix)/1000) #calculate pixel to meter and invert   
         cv2.circle(img , (draw_x,draw_y), 7, (125, 0, 125), -1)
         #drawing rectangle ROI
         cv2.rectangle(img , self.left_upper, self.right_lower, (125,0,125), 2)

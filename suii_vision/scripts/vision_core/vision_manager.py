@@ -83,7 +83,7 @@ class VisionManager(object):
         mf = self.dev.wait_for_frames()
         rc = mf.get_color_frame()
         img_raw = numpy.asarray(rc.get_data())
-        _, img_undistord = self.post_processing.filter_img(img_raw,0,0,0,0)
+        img_edges, img_undistord = self.post_processing.filter_img(img_raw,0,0,0,0)
         bb = self.yolo.run(img_undistord, False)
         ra = []
         for x in bb:
