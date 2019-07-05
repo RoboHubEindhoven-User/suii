@@ -20,8 +20,8 @@ class PostProcessing:
         l_square = 40 #mm
         w_square = 40 #mm
         # Calcutaing mm/pixel ratio from measurements from 40 cm hight:
-        self.l_per_pix = l_square/56.0 # In mm per pix
-        self.w_per_pix = w_square/56.0  # In mm per pix
+        self.l_per_pix = l_square/58.0 # In mm per pix
+        self.w_per_pix = w_square/58.0  # In mm per pix
         self.cx_biggest = None
         self.object_list = []
         self.debug = False
@@ -140,10 +140,10 @@ class PostProcessing:
             lower_val = 27
             upper_val = 99
         else:
-            area_val = 0
-            blur_val = 0
-            lower_val = 0
-            upper_val = 0
+            area_val = 6
+            blur_val = 126
+            lower_val = 75
+            upper_val = 251
 
         if self.debug:
             print("area {} blur {} lower {} upper {}".format(area_val,blur_val,lower_val,upper_val))
@@ -275,7 +275,8 @@ class PostProcessing:
             cv2.circle(img , (self.x, self.y), 7, (0, 255, 0), -1)
             return x_orientation,y_orientation,myradians,True 
         else:
-            return 0,0,0,False
+            x_orientation,y_orientation,myradians,boolean = self.roi_center_rotation(img)
+            return x_orientation,y_orientation,myradians,boolean
 
     def roi_center_rotation(self,img):
         #MidPoint of camera in pixels
@@ -297,7 +298,7 @@ class PostProcessing:
         x_orientation = x_mid_roi - x_mid  #in pixels (from line)
         y_orientation = y_mid - y_mid_roi #in pixels (from line)
         x_orientation = (x_orientation*self.l_per_pix)/1000 #calculate pixel to meter and invert
-        y_orientation = (y_orientation*self.w_per_pix)/1000 #calculate pixel to meter and invert   
+        y_orientation = (y_orientation*self.w_per_pix)/1000) #calculate pixel to meter and invert   
         cv2.circle(img , (draw_x,draw_y), 7, (125, 0, 125), -1)
         #drawing rectangle ROI
         cv2.rectangle(img , self.left_upper, self.right_lower, (125,0,125), 2)
