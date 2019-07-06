@@ -13,7 +13,7 @@ class Yolo(object):
             self.config_dict = {
                 "cfg": "/home/suii/workspace/yolo_test_stm/config/full_yolo.cfg", # Config file path
                 "data": "/home/suii/workspace/yolo_test_stm/config/full_yolo.data", # Data file path
-                "weights": "/home/suii/workspace/yolo_test_stm/tmp/full_yolo_70000.weights", # Weights file path
+                "weights": "/home/suii/workspace/yolo_test_stm/tmp/full_yolo.backup", # Weights file path
                 "conf_thres": 0.6, # Confidence threshold (accuracy)
                 "nms_thres": 0.2,  # Non-maximum supression threshold (compression, lower value = more compression)
                 "size": 416 # DO NOT CHANGE!!!

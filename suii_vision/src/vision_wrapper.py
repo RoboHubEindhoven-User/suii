@@ -134,10 +134,10 @@ class Wrapper(object):
             p = PoseStamped()
             p.header.frame_id = "camera"
             p.pose.position.x = x
-            p.pose.position.y = y
+            p.pose.position.y = y - 0.02
 
             if "Mall" in name:
-                p.pose.position.z = -0.4
+                p.pose.position.z = -0.38
             else:
                 p.pose.position.z = -0.415
 

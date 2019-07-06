@@ -26,9 +26,9 @@ class PostProcessing:
         self.object_list = []
         self.debug = False
         # Camera calibration files
-        data = np.load('/home/jeroen/catkin_ws/src/suii/suii_vision/scripts/camera_calibration/mtx.npz')
+        data = np.load('/home/suii/catkin_ws/src/suii/suii_vision/scripts/camera_calibration/mtx.npz')
         self.mtx = data['mtx']
-        data = np.load('/home/jeroen/catkin_ws/src/suii/suii_vision/scripts/camera_calibration/dist.npz')
+        data = np.load('/home/suii/catkin_ws/src/suii/suii_vision/scripts/camera_calibration/dist.npz')
         self.dist = data['dist'] 
         self.mal_or_object = "object"
 
@@ -287,7 +287,7 @@ class PostProcessing:
         width = self.right_lower[0] - self.left_upper[0]
         lenght = self.right_lower[1] - self.left_upper[1]
         if width > lenght:
-            myradians = 0
+            myradians = 0.001
         else:
             myradians = -(0.5*math.pi)
         #center
@@ -298,7 +298,7 @@ class PostProcessing:
         x_orientation = x_mid_roi - x_mid  #in pixels (from line)
         y_orientation = y_mid - y_mid_roi #in pixels (from line)
         x_orientation = (x_orientation*self.l_per_pix)/1000 #calculate pixel to meter and invert
-        y_orientation = (y_orientation*self.w_per_pix)/1000) #calculate pixel to meter and invert   
+        y_orientation = (y_orientation*self.w_per_pix)/1000 #calculate pixel to meter and invert   
         cv2.circle(img , (draw_x,draw_y), 7, (125, 0, 125), -1)
         #drawing rectangle ROI
         cv2.rectangle(img , self.left_upper, self.right_lower, (125,0,125), 2)
