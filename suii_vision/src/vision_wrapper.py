@@ -102,9 +102,13 @@ class Wrapper(object):
 
         rospy.init_node("vision_control", anonymous=False)
         rospy.Service("/get_scan_all", VisionScan, handler=self.callback_all)
+        rospy.Subscriber("table_height", Float32, self.getTableHeight)
         self.tfb = tf.TransformBroadcaster()
         self.tfl = tf.TransformListener()
         rospy.spin()
+
+    def getTableHeight(self, data):
+        self.tableHeight = data.data
 
     def callback_all(self, service_data):
         result = self.client.process_one(0x00, [])
@@ -134,12 +138,27 @@ class Wrapper(object):
             p = PoseStamped()
             p.header.frame_id = "camera"
             p.pose.position.x = x
-            p.pose.position.y = y - 0.02
+
+            if not "Mall" in name:
+                p.pose.position.y = y - 0.02
+            else:
+                p.pose.position.y = y
 
             if "Mall" in name:
-                p.pose.position.z = -0.38
+                p.pose.position.z = -0.37
+            elif self.tableHeight == 0.0:
+                p.pose.position.z = -0.4
+            elif self.tableHeight == 4.0:
+                p.pose.position.z = -0.408
+            elif self.tableHeight == 9.0:
+                p.pose.position.z = -0.407
+            elif self.tableHeight == 16.0:
+                p.pose.position.z = -0.405
             else:
-                p.pose.position.z = -0.415
+                p.pose.position.z = -0.4
+
+            # -0.4 for O cm
+            # -0.415 for 9 cm
 
             #Special angle changes
             z = -z + (math.pi/2 * (abs(z)/z))

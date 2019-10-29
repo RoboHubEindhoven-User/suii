@@ -18,7 +18,7 @@ class EuclideanDistanceCalculator(object):
 
 
     def get_distance_handler(self, waypoint_data):
-        distance = self.calculate_euclidean_distance(waypoint_data.x, waypoint_data.y)
+        distance = 0 #self.calculate_euclidean_distance(waypoint_data.x, waypoint_data.y)
         return distance         
 
 

@@ -93,8 +93,8 @@ class objectManipulation:
         
         dropDistance = 0.15
 
-        x = 0.7 # 0.7 meter in front of robot (base_link)
-        y = -dropDistance*2 + (dropDistance*self.dropIndex) # 10cm between new drop points.(offset resets when driving.)
+        x = 0.55 + (dropDistance * (self.dropIndex/3)) # 0.7 meter in front of robot (base_link)
+        y = -dropDistance + (dropDistance*(self.dropIndex % 3)) # 10cm between new drop points.(offset resets when driving.)
         z = (self.tableHeight*0.01) + 0.04 # table height + 4 cm 
 
         pose = [[x,y,z],[0,0,0,1]]
@@ -120,7 +120,9 @@ class objectManipulation:
         return True
 
     def findHole(self,itemID): # Find hole Behavior (curently mostly the same as findItem)
-        item = self.getHole(itemID)
+        itemID = itemID % 100
+	rospy.loginfo("findhole with id {}".format(itemID))
+	item = self.getHole(itemID)
         if item:
             return item
         i = 0
@@ -190,7 +192,8 @@ class objectManipulation:
         return False
     
     def getHole(self,itemID):
-        response = self.item_getHole(ItemRequest(itemID,False))# id, onRobot
+        rospy.loginfo("get hole {}".format(itemID))
+	response = self.item_getHole(ItemRequest(itemID,False))# id, onRobot
         if response.sucess:
             return response.link
         return False
@@ -254,12 +257,12 @@ class myNode:
         return response
 
     def handle_findhole(self,req):  
-        print("findhole called")
+        print("findhole called {}")
         hole = False
-        if req.itemID > 100:
-            hole = self.robot.findHole(req.itemID)
-        else:
-            hole = self.robot.findItem(req.itemID,False)
+        #if req.itemID > 100:
+        hole = self.robot.findHole(req.itemID)
+        #else:
+            #hole = self.robot.findItem(req.itemID,False)
             
         if hole is False:
             return ItemFindholeResponse(sucess = False)

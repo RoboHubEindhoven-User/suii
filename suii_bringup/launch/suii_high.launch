@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find object_manipulation)/launch/object_manipulation.launch"/>
+  <node pkg="suii_navigation" type="manager.py" name="nav_manager" output="screen"/>
+  <node pkg="suii_vision" type="vision_wrapper.py" name="vision_wrapper" output="screen"/>
+  <!--<include file="$(find suii_task_manager)/launch/suii_task_manager.launch"/>
+  <include file="$(find suii_task_executor)/launch/suii_task_executor.launch"/>-->
+</launch>

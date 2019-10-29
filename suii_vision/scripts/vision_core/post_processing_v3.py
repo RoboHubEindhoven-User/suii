@@ -64,14 +64,16 @@ class PostProcessing:
         #add values to list
         list_vars = [name_var,tf_vals[0],tf_vals[1],tf_vals[2]]
         if self.debug:
-            print("name_var: {}, x {}, y {}, z {}".format(name_var,tf_vals[0],tf_vals[1],tf_vals[2]))
-            cv2.imshow('img_var',img)
-            cv2.waitKey(5000)
-            cv2.destroyAllWindows()
+            print("name_var: {}, x {}, y {}, z {}, bool {}".format(name_var,tf_vals[0],tf_vals[1],tf_vals[2],tf_vals[3]))
+            #cv2.imshow('img_var',img)
+            #cv2.waitKey(5000)
+            #cv2.destroyAllWindows()
         if tf_vals[3] == True:
             self.object_list.append(list_vars)
+            #print("returend true")
             return True  
         else: 
+            #print("returend false")
             return False
         
         
@@ -286,10 +288,11 @@ class PostProcessing:
         #rotation
         width = self.right_lower[0] - self.left_upper[0]
         lenght = self.right_lower[1] - self.left_upper[1]
-        if width > lenght:
-            myradians = 0.001
+        if width < lenght:
+            myradians = 1.565
         else:
-            myradians = -(0.5*math.pi)
+            #myradians = -(0.5*math.pi)
+            myradians = 0.05
         #center
         x_mid_roi = (width/2) + self.left_upper[0]
         y_mid_roi = (lenght/2) + self.left_upper[1]

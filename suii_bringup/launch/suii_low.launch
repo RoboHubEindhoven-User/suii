@@ -1,0 +1,7 @@
+<launch>
+  <include file="$(find suii_manipulation)/launch/UR3.launch"/>
+  <include file="$(find suii_bringup)/launch/navigation.launch">
+    <arg name="map_obstacle" value="map_tu_demo_AMCL"/>
+    <arg name="map_amcl" value="map_tu_demo_AMCL"/>
+  </include>
+</launch>
